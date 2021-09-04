@@ -1,4 +1,3 @@
-### YuzzuKamiyaka.github.io
 ### Access my github.io here
 <a href="https://YuzzuKamiyaka.github.io">Click here</a>
 <h1>What is Github Io</h1>
