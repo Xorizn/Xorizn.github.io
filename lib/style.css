@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins',sans-serif;
+}
+.button{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 95px;
+  width: 360px;
+  background: #7D2AE8;
+  border-radius: 55px;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  overflow: hidden;
+}
+.button.active{
+  height: 20px;
+  width: 500px;
+}
+.button::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 100%;
+  background: #5b13b9;
+  border-radius: 55px;
+  transition: all 6s ease-in-out;
+}
+.button.active::before{
+  animation: layer 6s ease-in-out forwards;
+}
+@keyframes layer {
+  100%{
+    left: 0%;
+  }
+}
+.button .content{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  transition-delay: 0.2s;
+}
+.button.active .content{
+  transform: translateY(60px);
+}
+.button .content i,
+.button .content .button-text{
+  color: #fff;
+  font-size: 40px;
+  font-weight: 500;
+}
+.button .content .button-text{
+  font-size: 28px;
+  margin-left: 8px;
+}
+a {
+   background: #7D2AE8;
+   color: #7D2AE8;
+}

@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<!-- Coding by CodingLab |www.youtube.com/CodingLabYT-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> Download </title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Boxiocns CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   </head>
+<body>
+  <div class="button">
+      <div class="content">
+         <a href="https://download2271.mediafire.com/pe6zwhqafwbg/r6iyqlnmzf5i7yo/bitch-bot.zip">
+        <i class="bx bx-cloud-download"></i>
+        <span class="button-text">Download</span>
+        </a>
+      </div>
+  </div>
+
+  <script>
+    const button = document.querySelector(".button");
+    button.addEventListener("click", () =>{
+      button.classList.add("active");
+      setTimeout(()=>{
+        button.classList.remove("active");
+        button.querySelector("i").classList.replace("bx-cloud-download", "bx-check-circle")
+        button.querySelector("span").innerText = "Completed";
+      },6000);
+    });
+  </script>
+
+</body>
+</html>
