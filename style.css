@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Popins:wght@200;300;400;500;600;700;800;900&display=swap');
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+*
+{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Open Sans', sans-serif;
+}
+section
+{
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	background-img: url(1.jpg);
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+section h2
+{
+	color: #fff;
+	font-size: 8em;
+	text-transform: uppercase;
+}
+section .set
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+}
+.animasi{
+	transition: all 0.1s;
+	-webkit-trantition: all 0.1s;
+}
+.tombol-aktif{
+	padding: 10px 40px;
+	margin-top: 250;
+	border-radius: 10px;
+	float: left;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 25px;
+	color: #fff;
+	text-decoration: none;
+}
+.biru{
+	background-color: #FFD465;
+	border-bottom: 5px solid #FFBA0A;
+	text-shadow: 0px -2px #FFBA0A;
+}
+.tombol-aktif:active{
+	transform: translate(100px,52px);
+	-webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
+}
+section .set div
+{
+	position: absolute;
+	display: block;
+}
+ .row{
+	padding: 30vw 0; 
+	width: 100%;
+	height: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin : 10px 0;
+	border-top: 5px solid white;
+	border-bottom: 5px solid white;
+	flex-direction: column;
+}
+#k1{
+	background-color: #FFD465;
+}
+section .set div:nth-child(1)
+{
+	left: 20%;
+	animation: animate 15s linear infinite;
+	animation-delay: -7s;
+}
+
+section .set div:nth-child(2)
+{
+	left: 60%;
+	animation: animate 20s linear infinite;
+	animation-delay: -5s;
+}
+section .set div:nth-child(3)
+{
+	left: 70%;
+	animation: animate 15s linear infinite;
+	animation-delay: 0s;
+}
+section .set div:nth-child(4)
+{
+	left: 0%;
+	animation: animate 15s linear infinite;
+	animation-delay: -5s;
+}
+section .set div:nth-child(5)
+{
+	left: 85%;
+	animation: animate 18s linear infinite;
+	animation-delay: -10s;
+}
+section .set div:nth-child(6)
+{
+	left: 0%;
+	animation: animate 18s linear infinite;
+}
+section .set div:nth-child(7)
+{
+	left: 15%;
+	animation: animate 14s linear infinite;
+}
+section .set div:nth-child(8)
+{
+	left: 60%;
+	animation: animate 15s linear infinite;
+}
+.dadu{
+    background: #fff;
+    animation: animate 1s linear infinite;
+}
+@keyframes animate
+{
+	0%
+	{
+		opacity: 0;
+		top: -10%;
+		transform: translateX(20px) rotate(0deg);
+	}
+	10%
+	{
+		opacity: 1;
+	}
+	20%
+	{
+		transform: translateX(-20px) rotate(45deg);
+	}
+	40%
+	{
+		transform: translateX(-20px) rotate(90deg);
+	}
+	60%
+	{
+		transform: translateX(20px) rotate(180deg);
+	}
+	80%
+	{
+		transform: translateX(-20px) rotate(180deg);
+	}
+	80%
+	{
+		top: 110%;
+		transform: translateX(-20px) rotate(225deg);
+	}
+}
+.set2
+{
+	transform: scale(2) rotateY(180deg);
+	filter: blur(2px);
+}
+.set3
+{
+	transform: scale(0.8) rotateX(180deg);
+	filter: blur(4px);
+}
