@@ -367,13 +367,15 @@ Anying Li Babi
 	<script src="js/app.js"></script>
   <script>
 function trackChange(value) {
-	var url = "https://yuzzu-api.herokuapp.com/api/instagram?link=" + value;
+	var url = "https://yuzzu-api.herokuapp.com/api/instagram?link=https://www.instagram.com/reel/CVm8wqVF1lm/?utm_medium=copy_link";
 	$.getJSON( url, {
   	format: "json"
 	})
   .done(function( data ) {
 var url = data.result.result.link
-window.open(url)
+var anu = 'Download'
+var link = '<a href="'+url+'" rel="external" data-direction="reverse"><button class="btn" style="width:100%"><i class="fa fa-download"></i>'+anu+'</button></a>'
+document.getElementById('Download').innerHTML = link;
   });
 }
   </script>
