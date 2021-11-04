@@ -139,17 +139,16 @@ Anying Li Babi
               <i class="align-middle" data-feather="download"></i> <span class="align-middle">TikTok </span>
             </a>
 					</li>
-					<li class="sidebar-item active">
+					<li class="sidebar-item">
 						<a class="sidebar-link" href="/instagram">
               <i class="align-middle" data-feather="download"></i> <span class="align-middle">Instagram </span>
             </a>
 					</li>
-					<li class="sidebar-item">
+					<li class="sidebar-item active">
 						<a class="sidebar-link" href="/twitter">
               <i class="align-middle" data-feather="download"></i> <span class="align-middle">Twitter </span>
             </a>
 					</li>
-
 
 
 
@@ -326,13 +325,15 @@ Anying Li Babi
 <div class="container">
     	<div class="container__item container__item--bottom">
     	    <center>
-    	        <p><h4>INSTAGRAM</h4>Tunggu Setelah Menekan Enter<br>Wait After Press Enter</p>
+    	        <p><h4>TWITTER</h4>Tunggu Setelah Menekan Enter<br>Wait After Press Enter</p>
     	    </center>
 	</div>
 	<div class="container__item">
+	    <form>
 			<input type="text" class="form__field" placeholder="Paste Your Link" onkeyup="trackChange(this.value)" id="myInput">
-				    
+				    <br>
 			<input onclick="alert('WAIT A MINUTE\nTUNGGU SEBENTAR')" value="Enter" width="10px" type="submit" class="btn"></input>
+		</form>
 	</div>
 	<div class="container__item container__item--bottom">
 	    <br>
@@ -367,12 +368,12 @@ Anying Li Babi
 	<script src="js/app.js"></script>
   <script>
 function trackChange(value) {
-	var url = "https://yuzzu-api.herokuapp.com/api/instagram?link=" + value;
+	var url = "https://yuzzu-api.herokuapp.com/api/twitter?link=" + value;
 	$.getJSON( url, {
   	format: "json"
 	})
   .done(function( data ) {
-var url = data.result.result.link
+var url = data.result.HD
 var anu = 'Download'
 var link = '<a href="'+url+'" rel="external" data-direction="reverse"><button class="btn" style="width:100%"><i class="fa fa-download"></i>'+anu+'</button></a>'
 document.getElementById('Download').innerHTML = link;
