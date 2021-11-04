@@ -11,7 +11,7 @@
 
     <script>
 function trackChange(value) {
-    $.getJSON('https://yuzzu-api.herokuapp.com/api/instagram?link=https://www.instagram.com/reel/CVm8wqVF1lm/?utm_medium=copy_link', function(data) {
+    $.getJSON('https://yuzzu-api.herokuapp.com/api/instagram?link='+value, function(data) {
         window.open(data.result.result.link)
         var url = data.result.result.link
         var text = '<a href="'+url+'">Halok</a>'
