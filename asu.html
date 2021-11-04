@@ -6,17 +6,21 @@
 </head>
 
 <body>
+    <input type="text" onkeyup="trackChange(this.value)" id="myInput">
     <div class="mypanel"></div>
 
     <script>
+function trackChange(value) {
     $.getJSON('https://yuzzu-api.herokuapp.com/api/instagram?link=https://www.instagram.com/reel/CVm8wqVF1lm/?utm_medium=copy_link', function(data) {
-
-        var text = `Date: ${data.result.result.link}<br>
-                    `
+        window.open(data.result.result.link)
+        var url = data.result.result.link
+        var text = '<a href="'+url+'">Halok</a>'
 
 
         $(".mypanel").html(text);
     });
+}
+    
     </script>
 
 </body>
