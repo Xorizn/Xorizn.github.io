@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>JavaScript - read JSON from URL</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="mypanel"></div>
+
+    <script>
+    $.getJSON('https://yuzzu-api.herokuapp.com/api/instagram?link=https://www.instagram.com/reel/CVm8wqVF1lm/?utm_medium=copy_link', function(data) {
+
+        var text = `Date: ${data.result.result.link}<br>
+                    `
+
+
+        $(".mypanel").html(text);
+    });
+    </script>
+
+</body>
+</html>
