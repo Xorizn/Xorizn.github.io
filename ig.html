@@ -373,12 +373,9 @@ function trackChange(value) {
 	})
   .done(function( data ) {
 var url = data.result.result.link
-var anu = 'Download'
-var link = '<a href="'+url+'" rel="external" data-direction="reverse"><button class="btn" style="width:100%"><i class="fa fa-download"></i>'+anu+'</button></a>'
-document.getElementById('Download').innerHTML = link;
-//window.open(url)
+window.open(url)
   });
-};
+}
   </script>
 </body>
 
