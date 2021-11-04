@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+	<meta name="author" content="AdminKit">
+	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+
+	<link rel="canonical" href="https://demo-basic.adminkit.io/pages-profile.html" />
+
+	<title>Website Apis - Yuzzu Kamiyaka</title>
+<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+	<link href="css/app.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=PT+Sans'><link rel="stylesheet" href="./style.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 20px;
+}
+input[type=submit] {
+
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlue;
+}
+.centang {
+    margin-left: 75px;
+}
+.heading {
+    margin-left: 190px;
+}
+.green {
+    color: green;
+}
+	</style>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar js-sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="index.html">
+          <span class="align-middle">Yuzzu Kamiyaka</span>
+        </a>
+
+				<ul class="sidebar-nav">
+					<li class="sidebar-header">
+						Pages
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/home">
+              <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/profile">
+              <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+            </a>
+					</li>
+
+					<li class="sidebar-header">
+						Tools & Components
+					</li>
+<!--
+Dari Sini Anying
+Anying Li Babi
+-->
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/download">
+              <i class="align-middle" data-feather="download"></i> <span class="align-middle">Download </span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/photooxy">
+              <i class="align-middle" data-feather="camera"></i> <span class="align-middle">Photo Oxy</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/media">
+              <i class="align-middle" data-feather="link"></i> <span class="align-middle">Media </span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/anime">
+              <i class="align-middle" data-feather="tv"></i> <span class="align-middle">Anime </span>
+            </a>
+					</li>
+					
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/info">
+              <i class="align-middle" data-feather="radio"></i> <span class="align-middle">Info </span>
+            </a>
+					</li>
+					
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/fun">
+              <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Fun </span>
+            </a>
+					</li>
+					
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/baseenc">
+              <i class="align-middle" data-feather="lock"></i> <span class="align-middle">Encode & Decode </span>
+            </a>
+					</li>
+					
+					
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/other">
+              <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Other </span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+						Direct Download
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/tik-tok">
+              <i class="align-middle" data-feather="download"></i> <span class="align-middle">TikTok </span>
+            </a>
+					</li>
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="/instagram">
+              <i class="align-middle" data-feather="download"></i> <span class="align-middle">Instagram </span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/twitter">
+              <i class="align-middle" data-feather="download"></i> <span class="align-middle">Twitter </span>
+            </a>
+					</li>
+
+
+
+
+					<li class="sidebar-header">
+						Plugins & Addons
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="https://yuzzukamiyaka.github.io/">
+              <i class="align-middle" data-feather="terminal"></i> <span class="align-middle">Bot WhatsApp</span>
+            </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="https://wa.me/6281337541779">
+              <i class="align-middle" data-feather="info"></i> <span class="align-middle">About</span>
+            </a>
+					</li>
+				</ul>
+
+				<div class="sidebar-cta">
+					<div class="sidebar-cta-content">
+						<strong class="d-inline-block mb-2">Upgrade to Pro</strong>
+						<div class="mb-3 text-sm">
+							Are you looking for more components? Check out our premium version.
+						</div>
+						<div class="d-grid">
+							<a href="https://wa.me/6281337541779" class="btn btn-primary">Upgrade to Pro</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<div class="main">
+			<nav class="navbar navbar-expand navbar-light navbar-bg">
+				<a class="sidebar-toggle js-sidebar-toggle">
+          <i class="hamburger align-self-center"></i>
+        </a>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav navbar-align">
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="bell"></i>
+									<span class="indicator">2</span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+								<div class="dropdown-menu-header">
+									2 New Notifications
+								</div>
+								<div class="list-group">
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-danger" data-feather="alert-circle"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Update completed</div>
+												<div class="text-muted small mt-1">Restart server heroku</div>
+												<div class="text-muted small mt-1">3 month ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-warning" data-feather="bell"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Add Features</div>
+												<div class="text-muted small mt-1">Add 10 Features</div>
+												<div class="text-muted small mt-1">1 month ago</div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="dropdown-menu-footer">
+									<span class="text-muted">Info</span>
+								</div>
+							</div>
+						</li>
+						
+						
+						<!-- Dancok -->
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="message-square"></i>
+									<span class="indicator">3</span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
+								<div class="dropdown-menu-header">
+									<div class="position-relative">
+										3 New Messages
+									</div>
+								</div>
+								<div class="list-group">
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="img/avatars/avatar-5.jpg" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Angga</div>
+												<div class="text-muted small mt-1">Bagi apikey bang.</div>
+												<div class="text-muted small mt-1">15m ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="img/avatars/avatar-2.jpg" class="avatar img-fluid rounded-circle" alt="William Harris">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Denis</div>
+												<div class="text-muted small mt-1">Bagi esce bot whatsapp bang.</div>
+												<div class="text-muted small mt-1">2h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<img src="img/avatars/avatar-6.jpg" class="avatar img-fluid rounded-circle" alt="Christina Mason">
+											</div>
+											<div class="col-10 ps-2">
+												<div class="text-dark">Selly</div>
+												<div class="text-muted small mt-1">Halo sayang, udah makan?.</div>
+												<div class="text-muted small mt-1">4h ago</div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="dropdown-menu-footer">
+									<a href="#" class="text-muted">Messages</a>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+                <i class="align-middle" data-feather="settings"></i>
+              </a>
+
+							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="Yuzzu" /> <span class="text-dark">Yuzzu</span>
+              </a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="https://wa.me/6281337541779"><i class="align-middle me-1" data-feather="help-circle"></i> Help</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="/">Log out</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<div class="mb-3">
+						<h1 class="h3 d-inline align-middle">Direct Download</h1>
+					</div>
+					<div class="row">
+						<div class="col-12 col-lg-6">
+							<div class="card">
+								<div class="card-body">
+<div class="container">
+    	<div class="container__item container__item--bottom">
+    	    <center>
+    	        <p><h4>INSTAGRAM</h4>Tunggu Setelah Menekan Enter<br>Wait After Press Enter</p>
+    	    </center>
+	</div>
+	<div class="container__item">
+			<input type="text" class="form__field" placeholder="Paste Your Link" onkeyup="trackChange(this.value)" id="myInput">
+				    
+			<input onclick="alert('WAIT A MINUTE\nTUNGGU SEBENTAR')" value="Enter" width="10px" type="submit" class="btn"></input>
+	</div>
+	<div class="container__item container__item--bottom">
+	    <br>
+<div id="Nama"></div>
+<div id="Download"></div>
+
+	</div>
+</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				
+			</main>
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted">
+					    <center>
+							<p class="mb-0">
+								<a class="text-muted" href="https://youtube.com/c/YuzzuKamiyaka" target="_blank"><center>COPYRIGHTS</center> &copy;<strong>YUZZU KAMIYAKA ALL RIGHTS RESERVED</strong></a>
+							
+							</p>
+							</center>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+	<script src="js/app.js"></script>
+  <script>
+function trackChange(value) {
+	var url = "https://hardianto-chan.herokuapp.com/api/download/instadl?apikey=hardianto&url=" + value;
+	$.getJSON( url, {
+  	format: "json"
+	})
+  .done(function( data ) {
+var url = data.medias.downloadUrl
+var name = data.user.fullName
+var ress = '<p>'+name+'</p>'
+document.getElementById('Nama').innerHTML = ress;
+var anu = 'Download'
+var link = '<a href="'+url+'" rel="external" data-direction="reverse"><button class="btn" style="width:100%"><i class="fa fa-download"></i>'+anu+'</button></a>'
+document.getElementById('Download').innerHTML = link;
+//window.open(url)
+  });
+};
+  </script>
+</body>
+
+</html>
