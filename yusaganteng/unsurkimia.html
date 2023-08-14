@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Konfigurasi elektron elemen yang ada di dunia by kelompok 3</title>
+    <style>
+      /* CSS styles for the table and search bar */
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      .search-container {
+        display: flex;
+        align-items: center;
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 6px;
+        border: none;
+        outline: none;
+      }
+
+      .search-button {
+        padding: 6px 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Konfigurasi elektron elemen yang ada di dunia by kelompok 3</h1>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input
+        type="text"
+        class="search-input"
+        id="searchInput"
+        placeholder="Cari elemen yang kamu inginkan..."
+      />
+      <button class="search-button" onclick="searchElements()">Search</button>
+    </div>
+
+    <!-- Table -->
+    <table id="elementsTable">
+      <tbody>
+        <tr>
+          <th>No</th>
+          <th>Element</th>
+          <th>Symbol</th>
+          <th>Konfigurasi</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Hydrogen</td>
+          <td>H</td>
+          <td>1s1</td>
+        </tr>
+
+        <tr>
+          <td>2</td>
+          <td>Helium</td>
+          <td>He</td>
+          <td>1s2</td>
+        </tr>
+
+        <tr>
+          <td>3</td>
+          <td>Lithium</td>
+          <td>Li</td>
+          <td>1s2 2s1</td>
+        </tr>
+
+        <tr>
+          <td>4</td>
+          <td>Beryllium</td>
+          <td>Be</td>
+          <td>1s2 2s2</td>
+        </tr>
+
+        <tr>
+          <td>5</td>
+          <td>Boron</td>
+          <td>B</td>
+          <td>1s2 2s2 2p1</td>
+        </tr>
+
+        <tr>
+          <td>6</td>
+          <td>Carbon</td>
+          <td>C</td>
+          <td>1s2 2s2 2p2</td>
+        </tr>
+
+        <tr>
+          <td>7</td>
+          <td>Nitrogen</td>
+          <td>N</td>
+          <td>1s2 2s2 2p3</td>
+        </tr>
+
+        <tr>
+          <td>8</td>
+          <td>Oxygen</td>
+          <td>O</td>
+          <td>1s2 2s2 2p4</td>
+        </tr>
+
+        <tr>
+          <td>9</td>
+          <td>Fluorine</td>
+          <td>F</td>
+          <td>1s2 2s2 2p5</td>
+        </tr>
+
+        <tr>
+          <td>10</td>
+          <td>Neon</td>
+          <td>Ne</td>
+          <td>1s2 2s2 2p6</td>
+        </tr>
+
+        <tr>
+          <td>11</td>
+          <td>Sodium</td>
+          <td>Na</td>
+          <td>1s2 2s2 2p6 3s1</td>
+        </tr>
+
+        <tr>
+          <td>12</td>
+          <td>Magnesium</td>
+          <td>Mg</td>
+          <td>1s2 2s2 2p6 3s2</td>
+        </tr>
+
+        <tr>
+          <td>13</td>
+          <td>Aluminum</td>
+          <td>Al</td>
+          <td>1s2 2s2 2p6 3s2 3p1</td>
+        </tr>
+
+        <tr>
+          <td>14</td>
+          <td>Silicon</td>
+          <td>Si</td>
+          <td>1s2 2s2 2p6 3s2 3p2</td>
+        </tr>
+
+        <tr>
+          <td>15</td>
+          <td>Phosphorus</td>
+          <td>P</td>
+          <td>1s2 2s2 2p6 3s2 3p3</td>
+        </tr>
+
+        <tr>
+          <td>16</td>
+          <td>Sulfur</td>
+          <td>S</td>
+          <td>1s2 2s2 2p6 3s2 3p4</td>
+        </tr>
+
+        <tr>
+          <td>17</td>
+          <td>Chlorine</td>
+          <td>Cl</td>
+          <td>1s2 2s2 2p6 3s2 3p5</td>
+        </tr>
+
+        <tr>
+          <td>18</td>
+          <td>Argon</td>
+          <td>Ar</td>
+          <td>1s2 2s2 2p6 3s2 3p6</td>
+        </tr>
+
+        <tr>
+          <td>19</td>
+          <td>Potassium</td>
+          <td>K</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s1</td>
+        </tr>
+
+        <tr>
+          <td>20</td>
+          <td>Calcium</td>
+          <td>Ca</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2</td>
+        </tr>
+
+        <tr>
+          <td>21</td>
+          <td>Scandium</td>
+          <td>Sc</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d1</td>
+        </tr>
+
+        <tr>
+          <td>22</td>
+          <td>Titanium</td>
+          <td>Ti</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d2</td>
+        </tr>
+
+        <tr>
+          <td>23</td>
+          <td>Vanadium</td>
+          <td>V</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d3</td>
+        </tr>
+
+        <tr>
+          <td>24</td>
+          <td>Chromium</td>
+          <td>Cr</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s1 3d5</td>
+        </tr>
+
+        <tr>
+          <td>25</td>
+          <td>Manganese</td>
+          <td>Mn</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d5</td>
+        </tr>
+
+        <tr>
+          <td>26</td>
+          <td>Iron</td>
+          <td>Fe</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d6</td>
+        </tr>
+
+        <tr>
+          <td>27</td>
+          <td>Cobalt</td>
+          <td>Co</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d7</td>
+        </tr>
+
+        <tr>
+          <td>28</td>
+          <td>Nickel</td>
+          <td>Ni</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d8</td>
+        </tr>
+
+        <tr>
+          <td>29</td>
+          <td>Copper</td>
+          <td>Cu</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s1 3d10</td>
+        </tr>
+
+        <tr>
+          <td>30</td>
+          <td>Zinc</td>
+          <td>Zn</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10</td>
+        </tr>
+
+        <tr>
+          <td>31</td>
+          <td>Gallium</td>
+          <td>Ga</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p1</td>
+        </tr>
+
+        <tr>
+          <td>32</td>
+          <td>Germanium</td>
+          <td>Ge</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p2</td>
+        </tr>
+
+        <tr>
+          <td>33</td>
+          <td>Arsenic</td>
+          <td>As</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p3</td>
+        </tr>
+
+        <tr>
+          <td>34</td>
+          <td>Selenium</td>
+          <td>Se</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p4</td>
+        </tr>
+
+        <tr>
+          <td>35</td>
+          <td>Bromine</td>
+          <td>Br</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p5</td>
+        </tr>
+
+        <tr>
+          <td>36</td>
+          <td>Krypton</td>
+          <td>Kr</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6</td>
+        </tr>
+
+        <tr>
+          <td>37</td>
+          <td>Rubidium</td>
+          <td>Rb</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1</td>
+        </tr>
+
+        <tr>
+          <td>38</td>
+          <td>Strontium</td>
+          <td>Sr</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2</td>
+        </tr>
+
+        <tr>
+          <td>39</td>
+          <td>Yttrium</td>
+          <td>Y</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d1</td>
+        </tr>
+
+        <tr>
+          <td>40</td>
+          <td>Zirconium</td>
+          <td>Zr</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d2</td>
+        </tr>
+
+        <tr>
+          <td>41</td>
+          <td>Niobium</td>
+          <td>Nb</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d4</td>
+        </tr>
+
+        <tr>
+          <td>42</td>
+          <td>Molybdenum</td>
+          <td>Mo</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1 4d5</td>
+        </tr>
+
+        <tr>
+          <td>43</td>
+          <td>Technetium</td>
+          <td>Tc</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d5</td>
+        </tr>
+
+        <tr>
+          <td>44</td>
+          <td>Ruthenium</td>
+          <td>Ru</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d7</td>
+        </tr>
+
+        <tr>
+          <td>45</td>
+          <td>Rhodium</td>
+          <td>Rh</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d8</td>
+        </tr>
+
+        <tr>
+          <td>46</td>
+          <td>Palladium</td>
+          <td>Pd</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10</td>
+        </tr>
+
+        <tr>
+          <td>47</td>
+          <td>Silver</td>
+          <td>Ag</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1 4d10</td>
+        </tr>
+
+        <tr>
+          <td>48</td>
+          <td>Cadmium</td>
+          <td>Cd</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10</td>
+        </tr>
+
+        <tr>
+          <td>49</td>
+          <td>Indium</td>
+          <td>In</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p1</td>
+        </tr>
+
+        <tr>
+          <td>50</td>
+          <td>Tin</td>
+          <td>Sn</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p2</td>
+        </tr>
+
+        <tr>
+          <td>51</td>
+          <td>Antimony</td>
+          <td>Sb</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p3</td>
+        </tr>
+
+        <tr>
+          <td>52</td>
+          <td>Tellurium</td>
+          <td>Te</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p4</td>
+        </tr>
+
+        <tr>
+          <td>53</td>
+          <td>Iodine</td>
+          <td>I</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p5</td>
+        </tr>
+
+        <tr>
+          <td>54</td>
+          <td>Xenon</td>
+          <td>Xe</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6</td>
+        </tr>
+
+        <tr>
+          <td>55</td>
+          <td>Cesium</td>
+          <td>Cs</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s1</td>
+        </tr>
+
+        <tr>
+          <td>56</td>
+          <td>Barium</td>
+          <td>Ba</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2</td>
+        </tr>
+
+        <tr>
+          <td>57</td>
+          <td>Lanthanum</td>
+          <td>La</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f1</td>
+        </tr>
+
+        <tr>
+          <td>58</td>
+          <td>Cerium</td>
+          <td>Ce</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f2</td>
+        </tr>
+
+        <tr>
+          <td>59</td>
+          <td>Praseodymium</td>
+          <td>Pr</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f3</td>
+        </tr>
+
+        <tr>
+          <td>60</td>
+          <td>Neodymium</td>
+          <td>Nd</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f4</td>
+        </tr>
+
+        <tr>
+          <td>61</td>
+          <td>Promethium</td>
+          <td>Pm</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f5</td>
+        </tr>
+
+        <tr>
+          <td>62</td>
+          <td>Samarium</td>
+          <td>Sm</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f6</td>
+        </tr>
+
+        <tr>
+          <td>63</td>
+          <td>Europium</td>
+          <td>Eu</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f7</td>
+        </tr>
+
+        <tr>
+          <td>64</td>
+          <td>Gadolinium</td>
+          <td>Gd</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f7 5d1</td>
+        </tr>
+
+        <tr>
+          <td>65</td>
+          <td>Terbium</td>
+          <td>Tb</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f9</td>
+        </tr>
+
+        <tr>
+          <td>66</td>
+          <td>Dysprosium</td>
+          <td>Dy</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f10</td>
+        </tr>
+
+        <tr>
+          <td>67</td>
+          <td>Holmium</td>
+          <td>Ho</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f11</td>
+        </tr>
+
+        <tr>
+          <td>68</td>
+          <td>Erbium</td>
+          <td>Er</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f12</td>
+        </tr>
+
+        <tr>
+          <td>69</td>
+          <td>Thulium</td>
+          <td>Tm</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f13</td>
+        </tr>
+
+        <tr>
+          <td>70</td>
+          <td>Ytterbium</td>
+          <td>Yb</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14</td>
+        </tr>
+
+        <tr>
+          <td>71</td>
+          <td>Lutetium</td>
+          <td>Lu</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d1</td>
+        </tr>
+
+        <tr>
+          <td>72</td>
+          <td>Hafnium</td>
+          <td>Hf</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d2</td>
+        </tr>
+
+        <tr>
+          <td>73</td>
+          <td>Tantalum</td>
+          <td>Ta</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d3</td>
+        </tr>
+
+        <tr>
+          <td>74</td>
+          <td>Tungsten</td>
+          <td>W</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d4</td>
+        </tr>
+
+        <tr>
+          <td>75</td>
+          <td>Rhenium</td>
+          <td>Re</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d5</td>
+        </tr>
+
+        <tr>
+          <td>76</td>
+          <td>Osmium</td>
+          <td>Os</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d6</td>
+        </tr>
+
+        <tr>
+          <td>77</td>
+          <td>Iridium</td>
+          <td>Ir</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d7</td>
+        </tr>
+
+        <tr>
+          <td>78</td>
+          <td>Platinum</td>
+          <td>Pt</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d9</td>
+        </tr>
+
+        <tr>
+          <td>79</td>
+          <td>Gold</td>
+          <td>Au</td>
+          <td>1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10</td>
+        </tr>
+
+        <tr>
+          <td>80</td>
+          <td>Mercury</td>
+          <td>Hg</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p1
+          </td>
+        </tr>
+
+        <tr>
+          <td>81</td>
+          <td>Thallium</td>
+          <td>Tl</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p2
+          </td>
+        </tr>
+
+        <tr>
+          <td>82</td>
+          <td>Lead</td>
+          <td>Pb</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p2
+          </td>
+        </tr>
+
+        <tr>
+          <td>83</td>
+          <td>Bismuth</td>
+          <td>Bi</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p3
+          </td>
+        </tr>
+
+        <tr>
+          <td>84</td>
+          <td>Polonium</td>
+          <td>Po</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p4
+          </td>
+        </tr>
+
+        <tr>
+          <td>85</td>
+          <td>Astatine</td>
+          <td>At</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p5
+          </td>
+        </tr>
+
+        <tr>
+          <td>86</td>
+          <td>Radon</td>
+          <td>Rn</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6
+          </td>
+        </tr>
+
+        <tr>
+          <td>87</td>
+          <td>Francium</td>
+          <td>Fr</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s1
+          </td>
+        </tr>
+
+        <tr>
+          <td>88</td>
+          <td>Radium</td>
+          <td>Ra</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+          </td>
+        </tr>
+
+        <tr>
+          <td>89</td>
+          <td>Actinium</td>
+          <td>Ac</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f1
+          </td>
+        </tr>
+
+        <tr>
+          <td>90</td>
+          <td>Thorium</td>
+          <td>Th</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f2
+          </td>
+        </tr>
+
+        <tr>
+          <td>91</td>
+          <td>Protactinium</td>
+          <td>Pa</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f3
+          </td>
+        </tr>
+
+        <tr>
+          <td>92</td>
+          <td>Uranium</td>
+          <td>U</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f3 6d1
+          </td>
+        </tr>
+
+        <tr>
+          <td>93</td>
+          <td>Neptunium</td>
+          <td>Np</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f4
+          </td>
+        </tr>
+
+        <tr>
+          <td>94</td>
+          <td>Plutonium</td>
+          <td>Pu</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f6
+          </td>
+        </tr>
+
+        <tr>
+          <td>95</td>
+          <td>Americium</td>
+          <td>Am</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f7
+          </td>
+        </tr>
+
+        <tr>
+          <td>96</td>
+          <td>Curium</td>
+          <td>Cm</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f7 6d1
+          </td>
+        </tr>
+
+        <tr>
+          <td>97</td>
+          <td>Berkelium</td>
+          <td>Bk</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f9
+          </td>
+        </tr>
+
+        <tr>
+          <td>98</td>
+          <td>Californium</td>
+          <td>Cf</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f10
+          </td>
+        </tr>
+
+        <tr>
+          <td>99</td>
+          <td>Einsteinium</td>
+          <td>Es</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f11
+          </td>
+        </tr>
+
+        <tr>
+          <td>100</td>
+          <td>Fermium</td>
+          <td>Fm</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f12
+          </td>
+        </tr>
+
+        <tr>
+          <td>101</td>
+          <td>Mendelevium</td>
+          <td>Md</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f13
+          </td>
+        </tr>
+
+        <tr>
+          <td>102</td>
+          <td>Nobelium</td>
+          <td>No</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14
+          </td>
+        </tr>
+
+        <tr>
+          <td>103</td>
+          <td>Lawrencium</td>
+          <td>Lr</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d1
+          </td>
+        </tr>
+
+        <tr>
+          <td>104</td>
+          <td>Rutherfordium</td>
+          <td>Rf</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d2
+          </td>
+        </tr>
+
+        <tr>
+          <td>105</td>
+          <td>Dubnium</td>
+          <td>Db</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d3
+          </td>
+        </tr>
+
+        <tr>
+          <td>106</td>
+          <td>Seaborgium</td>
+          <td>Sg</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d4
+          </td>
+        </tr>
+
+        <tr>
+          <td>107</td>
+          <td>Bohrium</td>
+          <td>Bh</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d5
+          </td>
+        </tr>
+
+        <tr>
+          <td>108</td>
+          <td>Hassium</td>
+          <td>Hs</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d6
+          </td>
+        </tr>
+
+        <tr>
+          <td>109</td>
+          <td>Meitnerium</td>
+          <td>Mt</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d7
+          </td>
+        </tr>
+
+        <tr>
+          <td>110</td>
+          <td>Darmstadtium</td>
+          <td>Ds</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d9
+          </td>
+        </tr>
+
+        <tr>
+          <td>111</td>
+          <td>Roentgenium</td>
+          <td>Rg</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d10
+          </td>
+        </tr>
+
+        <tr>
+          <td>112</td>
+          <td>Copernicium</td>
+          <td>Cn</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d10
+          </td>
+        </tr>
+
+        <tr>
+          <td>113</td>
+          <td>Nihonium</td>
+          <td>Nh</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d10 7p1
+          </td>
+        </tr>
+
+        <tr>
+          <td>114</td>
+          <td>Flerovium</td>
+          <td>Fl</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d10 7p2
+          </td>
+        </tr>
+
+        <tr>
+          <td>115</td>
+          <td>Moscovium</td>
+          <td>Mc</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d7
+          </td>
+        </tr>
+
+        <tr>
+          <td>116</td>
+          <td>Livermorium</td>
+          <td>Lv</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d10 7p4
+          </td>
+        </tr>
+
+        <tr>
+          <td>117</td>
+          <td>Tennessine</td>
+          <td>Ts</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d10 7p5
+          </td>
+        </tr>
+
+        <tr>
+          <td>118</td>
+          <td>Oganesson</td>
+          <td>Og</td>
+          <td>
+            1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2
+            5f14 6d10 7p6
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+      // Function to search for elements
+      function searchElements() {
+        const input = document
+          .getElementById("searchInput")
+          .value.trim()
+          .toUpperCase();
+        const table = document.getElementById("elementsTable");
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+          // Start from 1 to skip the header row
+          const elementName = rows[i]
+            .getElementsByTagName("td")[0]
+            .innerText.toUpperCase();
+          const symbol = rows[i]
+            .getElementsByTagName("td")[1]
+            .innerText.toUpperCase();
+          const config = rows[i]
+            .getElementsByTagName("td")[2]
+            .innerText.toUpperCase();
+
+          if (
+            elementName.includes(input) ||
+            symbol.includes(input) ||
+            config.includes(input)
+          ) {
+            rows[i].style.display = ""; // Show the row if it matches the search
+          } else {
+            rows[i].style.display = "none"; // Hide the row if it doesn't match the search
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
