@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotify Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cheerio"></script>
+  </head>
+  <body>
+    <div id="container">
+      <input type="text" id="input-link" />
+      <button onclick="getData()">DOWNLOAD</button>
+      
+    </div>
+
+    <script>
+      function getData() {
+        let search = document.getElementById("input-link")
+        axios("https://xorizn-downloads.vercel.app/api/downloads/spotify?url=" + search.value).then(({data}) => {
+         let cont = document.getElementById("container")
+         let res = data.result
+         let htm = "";
+
+         htm += `<img src="${res.img}" alt="">`
+         htm += `<p>${res.title + ' ' + res.artis}</p>`
+         htm += `<a href="${res.mp3}">DOWNLOAD</a>`
+         htm += `<a href="/">REFRESH</a>`
+
+
+         cont.innerHTML = htm
+        })
+
+      }
+    </script>
+  </body>
+</html>
