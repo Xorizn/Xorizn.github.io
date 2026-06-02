@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Litera - University E-Library</title>
+    
+    <!-- Scripts & Fonts -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <!-- Centralized Stylesheet -->
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
+        }
+        
+        body {
+            background-color: #051424;
+            color: #d4e4fa;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+        
+        /* Custom Scrollbars */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #273647; border-radius: 10px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* UI Effects */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .emerald-glow {
+            box-shadow: 0 0 20px rgba(78, 222, 163, 0.15);
+        }
+        
+        /* View Transitions */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .view-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+    <!-- Centralized Tailwind Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#dae2fd",
+                        "background": "#051424",
+                        "primary": "#bec6e0",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#565e74",
+                        "surface-container-low": "#0d1c2d",
+                        "surface": "#051424",
+                        "on-primary-container": "#798098",
+                        "outline-variant": "#45464d",
+                        "on-primary-fixed": "#131b2e",
+                        "on-surface-variant": "#c6c6cd",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-background": "#d4e4fa",
+                        "on-tertiary-fixed": "#001e2c",
+                        "tertiary-fixed-dim": "#7bd0ff",
+                        "on-secondary-container": "#00311f",
+                        "on-surface": "#d4e4fa",
+                        "surface-variant": "#273647",
+                        "inverse-on-surface": "#233143",
+                        "surface-container-high": "#1c2b3c",
+                        "tertiary-fixed": "#c4e7ff",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#6ffbbe",
+                        "tertiary-container": "#001a27",
+                        "secondary-container": "#00a572",
+                        "surface-container-highest": "#273647",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-secondary": "#003824",
+                        "primary-container": "#0f172a",
+                        "surface-bright": "#2c3a4c",
+                        "on-tertiary-container": "#008abb",
+                        "surface-tint": "#bec6e0",
+                        "tertiary": "#7bd0ff",
+                        "surface-container": "#122131",
+                        "outline": "#909097",
+                        "inverse-surface": "#d4e4fa",
+                        "surface-dim": "#051424",
+                        "on-tertiary": "#00354a",
+                        "on-error-container": "#ffdad6",
+                        "on-primary": "#283044",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-container-lowest": "#010f1f",
+                        "secondary": "#4edea3",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-secondary-fixed": "#002113",
+                        "on-tertiary-fixed-variant": "#004c69",
+                        "crimson-red": "#dc2626",
+                        "on-crimson-red": "#ffffff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"
+                    },
+                    spacing: {
+                        "xs": "4px", "sm": "8px", "md": "16px", "lg": "24px", "xl": "32px",
+                        "base": "4px", "gutter": "16px", "margin-mobile": "16px", "margin-tablet": "32px"
+                    },
+                    fontFamily: {
+                        "title-md": ["Inter"], "body-lg": ["Inter"], "headline-lg": ["Inter"], 
+                        "body-md": ["Inter"], "label-xs": ["JetBrains Mono"], "headline-lg-mobile": ["Inter"], 
+                        "label-sm": ["JetBrains Mono"], "display-lg": ["Inter"]
+                    },
+                    fontSize: {
+                        "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-xs": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+
+    <!-- Unified Dynamic Headers -->
+    <header id="main-header" class="w-full top-0 sticky z-50 bg-surface-container transition-shadow duration-300">
+        <!-- Default Header (Dashboard, Search, Bookshelf) -->
+        <div id="header-default" class="flex justify-between items-center px-margin-mobile py-sm h-16">
+            <div class="flex items-center gap-md">
+                <button class="text-secondary hover:bg-white/12 transition-colors active:scale-95 duration-150 p-base rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="flex items-center gap-2 cursor-pointer" onclick="app.navigate('home')">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf_KpoDBYluyR_UsXJK9-WPSuxF0swiRp_UlrAkcrXj4GWb_XajE7vxbRKGIOdcfOf9Rq_xniOUprgDtT9elsPkyi6fGMM-4_rlMmoCqKLmGGmgeTsNA5HgcIViZJcIs4unKZRs5SVLjRAHuHVtyX5v8RSuhfwtRldzR69Eo4H3exMXiDyFlkM0dMMctfof8rv53gavBKGO0oWabENteuDzWctL3Q_IAzb3zGEz5c5z0z76TFiVj_zJ60AGdBfOqtix2xLktQNtNc" alt="Litera Logo" class="w-8 h-8 object-contain">
+                    <h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-secondary">Litera</h1>
+                </div>
+            </div>
+            <button class="text-secondary hover:bg-white/12 transition-colors active:scale-95 duration-150 p-base rounded-full flex items-center justify-center">
+                <span class="material-symbols-outlined">account_circle</span>
+            </button>
+        </div>
+
+        <!-- Details Header (Book Details Page) -->
+        <div id="header-details" class="hidden justify-between items-center px-margin-mobile py-sm h-16">
+            <div class="flex items-center gap-3">
+                <button onclick="app.navigateBack()" class="text-secondary hover:bg-white/12 transition-colors active:scale-95 duration-150 p-2 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </button>
+                <div class="flex items-center gap-2 cursor-pointer" onclick="app.navigate('home')">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf_KpoDBYluyR_UsXJK9-WPSuxF0swiRp_UlrAkcrXj4GWb_XajE7vxbRKGIOdcfOf9Rq_xniOUprgDtT9elsPkyi6fGMM-4_rlMmoCqKLmGGmgeTsNA5HgcIViZJcIs4unKZRs5SVLjRAHuHVtyX5v8RSuhfwtRldzR69Eo4H3exMXiDyFlkM0dMMctfof8rv53gavBKGO0oWabENteuDzWctL3Q_IAzb3zGEz5c5z0z76TFiVj_zJ60AGdBfOqtix2xLktQNtNc" alt="Litera Logo" class="w-8 h-8 object-contain">
+                    <h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-secondary">Litera</h1>
+                </div>
+            </div>
+            <button class="text-secondary hover:bg-white/12 transition-colors active:scale-95 duration-150 p-2 rounded-full flex items-center justify-center">
+                <span class="material-symbols-outlined">share</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Application Container -->
+    <main class="flex-grow pb-28 relative">
+        
+        <!-- ================= VIEW: HOME (DASHBOARD) ================= -->
+        <section id="view-home" class="view-section active px-margin-mobile pt-lg space-y-xl">
+            <!-- Search Widget -->
+            <div>
+                <div class="relative group cursor-pointer" onclick="app.navigate('search')">
+                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-on-surface-variant transition-colors">
+                        <span class="material-symbols-outlined">search</span>
+                    </div>
+                    <input readonly class="w-full bg-surface-container-high border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-secondary transition-all font-body-lg shadow-lg cursor-pointer" placeholder="Search titles, authors, or topics..." type="text">
+                </div>
+            </div>
+
+            <!-- Active Loans Widget -->
+            <div class="space-y-md">
+                <div class="flex justify-between items-end">
+                    <h2 class="font-title-md text-title-md text-on-surface">Your Active Loans</h2>
+                    <button onclick="app.navigate('bookshelf')" class="text-label-sm font-label-sm text-secondary uppercase tracking-wider hover:underline">View All</button>
+                </div>
+                <div class="bg-surface-container-low rounded-xl border border-surface-variant overflow-hidden p-md flex gap-md relative cursor-pointer hover:bg-surface-container-high transition-colors" onclick="app.navigate('details')">
+                    <div class="w-24 h-32 flex-shrink-0 bg-surface-container-highest rounded-lg overflow-hidden shadow-md">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqk2oor18m-RcMYMYu5kNtiCDehyaYogIlxo17Og0odyBHlDD0mLZSiwUkWMIiwKlHQT1XSSRdonM_HGkwI9gQ1i9BsDOV5WlqXF4-oBcOArIYmUOgQ2HsRDdtIZMH34WJg7dsfrs6aHUui4GX6xNFGrGt0heh4jznyst8_3AAM29vIx3FYsiAISs_sktvXOE7WxC96HmQzIdaoI00gCu3qlSbKADGa1otcPwwGwJaAD5AJgzgfwt6SRyuElWZ3SSsHdonWUgE9FM" alt="Advanced Quantum Mechanics">
+                    </div>
+                    <div class="flex flex-col justify-between flex-grow py-xs">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-title-md text-title-md text-on-surface leading-tight">Advanced Quantum Mechanics</h3>
+                                <span class="bg-error-container text-on-error-container font-label-xs px-2 py-1 rounded-full whitespace-nowrap">2 Days Left</span>
+                            </div>
+                            <p class="text-on-surface-variant text-body-md mt-1">Freeman Dyson</p>
+                        </div>
+                        <div class="flex gap-sm mt-md" onclick="event.stopPropagation()">
+                            <button class="flex-1 py-2 bg-secondary text-on-secondary font-label-sm rounded-lg active:scale-95 transition-transform hover:brightness-110">Renew</button>
+                            <button class="flex-1 py-2 border border-outline text-secondary font-label-sm rounded-lg active:scale-95 transition-transform hover:bg-white/5">Return Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended Grid -->
+            <div class="space-y-md">
+                <h2 class="font-title-md text-title-md text-on-surface">Recommended For You</h2>
+                <div class="grid grid-cols-2 gap-md">
+                    <!-- Recommended Book -->
+                    <div class="space-y-sm cursor-pointer group" onclick="app.navigate('details')">
+                        <div class="aspect-[2/3] bg-surface-container-low rounded-xl border border-surface-variant overflow-hidden relative">
+                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMUSezLvu4WZsHIJVzjJ1i7-2c-vEaUhOv7_G75ja-O6CSwzjO3PgqsLUn1wKw2LDu0KRwJN3-GUzNVuCnkmrrPQ2YKm5bBSIY117CsB5lUytelMJUo3vuAzQseYsbgA23beHDgALjrbQAzQezgQ2Nh50o58bz06WfQ21qghmKwrR54F008d3OA4I-UfeteT6X6HiH2CMO8fEcGr140rbmT112mX10NlMZmwg3xsNTedpOss-ICha908F52uoPyWMw9un3qwzkHH8" alt="Astrophysics Through Computation">
+                            <div class="absolute top-2 right-2">
+                                <span class="bg-secondary-container text-on-secondary-container font-label-xs px-2 py-0.5 rounded shadow-sm">AVAILABLE</span>
+                            </div>
+                        </div>
+                        <div class="px-xs">
+                            <h4 class="font-title-md text-on-surface line-clamp-1">Astrophysics Through Computation</h4>
+                            <p class="text-on-surface-variant text-body-md line-clamp-1">Cambridge University Press</p>
+                        </div>
+                    </div>
+                    <!-- Recommended Book -->
+                    <div class="space-y-sm cursor-pointer group" onclick="app.navigate('details')">
+                        <div class="aspect-[2/3] bg-surface-container-low rounded-xl border border-surface-variant overflow-hidden relative">
+                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2QEr-BC15v4-yiXdaijHYohIqtL1tO2DHNZ6ZIFDaNA6xgS1Bg1_j2HLr-jpjVfNxddzVZ38Krj_jfrqzXZ-wQCdKjYi5XcfO3n_w6zBZKWBUx-xXHaB8NZz0dyLJx3e-X2Ibu3F-0CPD5MNrLP0ibUtSDienIopmHcOvXhFwNqn2uvpvyEZtLyqwJPuS2S3rT_CIPiG--yPV49QVIoQP_kiQHXvzWLnk0FT1mlPVhUV8o0wygwoLeVLAtSkwngIiAcRneociplY" alt="Deep Learning">
+                            <div class="absolute top-2 right-2">
+                                <span class="bg-surface-variant text-on-surface-variant font-label-xs px-2 py-0.5 rounded shadow-sm">WAITLIST</span>
+                            </div>
+                        </div>
+                        <div class="px-xs">
+                            <h4 class="font-title-md text-on-surface line-clamp-1">Deep Learning</h4>
+                            <p class="text-on-surface-variant text-body-md line-clamp-1">Michael Fullan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW: SEARCH RESULTS ================= -->
+        <section id="view-search" class="view-section px-margin-mobile max-w-2xl mx-auto pt-sm">
+            <!-- Active Search Input -->
+            <div class="mt-lg">
+                <div class="relative group">
+                    <input id="active-search-input" class="w-full bg-surface-container-highest border-b-2 border-outline focus:border-secondary text-on-surface p-4 rounded-t-lg font-body-lg text-body-lg outline-none transition-all" placeholder="Search library..." type="text" value="Quantom Mechaniks">
+                    <span class="material-symbols-outlined absolute right-4 top-4 text-on-surface-variant cursor-pointer hover:text-on-surface" onclick="document.getElementById('active-search-input').value = ''">close</span>
+                </div>
+                <!-- Did you mean logic -->
+                <div class="mt-sm p-4 bg-primary-container rounded-lg flex items-center gap-3">
+                    <span class="material-symbols-outlined text-tertiary icon-filled">lightbulb</span>
+                    <p class="font-body-md text-on-surface-variant">
+                        Did you mean: <span class="text-secondary font-bold italic cursor-pointer hover:underline">Quantum Mechanics</span>?
+                    </p>
+                </div>
+            </div>
+
+            <!-- Results Summary -->
+            <div class="mt-xl mb-md flex justify-between items-end">
+                <h2 class="font-title-md text-secondary">Search Results</h2>
+                <span class="font-label-sm text-on-surface-variant">1,248 items</span>
+            </div>
+
+            <!-- Results List -->
+            <div class="grid gap-gutter">
+                <!-- Search Result Card -->
+                <div class="glass-card p-md rounded-xl flex gap-lg relative overflow-hidden group cursor-pointer hover:bg-surface-container-high transition-colors" onclick="app.navigate('details')">
+                    <div class="absolute top-2 right-2 px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded-full flex items-center gap-1 shadow-sm">
+                        <span class="material-symbols-outlined text-[14px] icon-filled">check_circle</span>
+                        <span class="font-label-xs">AVAILABLE</span>
+                    </div>
+                    <div class="w-24 h-32 flex-shrink-0 shadow-xl rounded overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3GdcZWsiCvMQfQYPK1XNaF00vnJXq67D6ByjQnLoDtQqnz1m-WsKsf4yHCGu8iPFuVGFufuJurPCv5tsDvY5fF0LmLj9SDBfMsjD6DX-PpZeIk57p1TLbtX_UXadOpvmHlC57_nsGknWvGGLhnbDV0ZvP0cN00CxFDh6nI1BqSwCz8fpPoak73A5MnC3ET_jR5oqfF5HBSIxziyW8vEwW2ddAo_m_dOtoc-9kbZkux-YOX9sOG03aWUk-lodzHakxE3svtAy3qgY" alt="The Principles of Quantum Mechanics">
+                    </div>
+                    <div class="flex flex-col justify-between py-xs">
+                        <div>
+                            <h3 class="font-title-md text-on-surface leading-tight">The Principles of Quantum Mechanics</h3>
+                            <p class="font-body-md text-on-surface-variant mt-1">P. A. M. Dirac</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="font-label-xs text-tertiary bg-tertiary-container px-2 py-1 rounded">PHYSICS</span>
+                            <code class="font-label-xs text-on-surface-variant">QC174.12.S52</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Result Card 2 -->
+                <div class="glass-card p-md rounded-xl flex gap-lg relative overflow-hidden group cursor-pointer hover:bg-surface-container-high transition-colors" onclick="app.navigate('details')">
+                    <div class="absolute top-2 right-2 px-2 py-0.5 bg-error-container text-on-error-container rounded-full flex items-center gap-1 shadow-sm">
+                        <span class="material-symbols-outlined text-[14px] icon-filled">schedule</span>
+                        <span class="font-label-xs">DUE MAY 12</span>
+                    </div>
+                    <div class="w-24 h-32 flex-shrink-0 shadow-xl rounded overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAioR6tueiOBP4O7Cyq8miCsAvvyZsmIPomHLLLk4q3Vx1CfAYnElB9KNY0uLF2Nc4syDzONqSEwZHF3u_1XWyaZADzmSSkt7b-Qs-jJqlu-DwzumHvPzC6YrFbvwPZQA-ieVibHPi-XYoVL2orfN82iUgrltEMy1tJmrjdG1OZHsGkCPTETMcoXL0l8TTjsfUj9h9pGGV3LQeqBbhqy3XARFSVTahywS91Ay8BA8evj81B3QShcM4UCVGlm77bST0a8Amo9A240zA" alt="Quantum Mechanics Concepts">
+                    </div>
+                    <div class="flex flex-col justify-between py-xs">
+                        <div>
+                            <h3 class="font-title-md text-on-surface leading-tight">Quantum Mechanics: Concepts and Apps</h3>
+                            <p class="font-body-md text-on-surface-variant mt-1">Nouredine Zettili</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="font-label-xs text-tertiary bg-tertiary-container px-2 py-1 rounded">GRADUATE</span>
+                            <code class="font-label-xs text-on-surface-variant">QC174.12.Z48</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contextual Filter FAB -->
+            <button class="fixed right-6 bottom-24 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-transform z-40">
+                <span class="material-symbols-outlined">filter_list</span>
+            </button>
+        </section>
+
+        <!-- ================= VIEW: BOOKSHELF ================= -->
+        <section id="view-bookshelf" class="view-section px-margin-mobile pt-sm max-w-2xl mx-auto">
+            <div class="mb-xl">
+                <h2 class="font-headline-lg-mobile text-on-surface mb-xs">My Bookshelf</h2>
+                <p class="text-on-surface-variant font-body-md">Manage your active loans and returns.</p>
+            </div>
+
+            <div class="space-y-md">
+                <!-- Borrowed Book Card -->
+                <div class="bg-surface-container rounded-xl p-md border border-surface-variant flex gap-md items-center transition-all duration-300 hover:bg-surface-container-high group cursor-pointer" onclick="app.navigate('details')">
+                    <div class="w-20 h-28 flex-shrink-0 bg-surface-variant rounded-lg overflow-hidden relative shadow-md">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqZiJwp22Mq4nx8l5j1RaXvceK2r05Yr_7JWFEaE-LpDNn3paj5jaAtmUX3MpWd3yxV_iE0okkAgdZfqjaAtHSx6RkULJ6j2cn6ZfTqU8w5PCfWPxUEfUgbthKj6WGfrb2ljasiEaMrBEvUE5uhNbe352CdN1cz4q6hexiFv4YkMsl9O-PWevZOiZph_dJ50TtFhQYUF6V0jgwoX5oVt3_hNNgpIkY6vs-MjEASB_vTHhDp01q3Y1j9C9PIlsHcrBFCRtxAzLu8oE" alt="Quantum Mechanics">
+                        <div class="absolute top-1 right-1 bg-secondary-container/90 px-xs py-[2px] rounded-sm">
+                            <span class="font-label-xs text-on-secondary-container uppercase">Digital</span>
+                        </div>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-between h-28">
+                        <div>
+                            <h3 class="font-title-md text-on-surface line-clamp-1">Quantum Mechanics</h3>
+                            <p class="text-on-surface-variant font-label-sm mt-xs">Arbab Ibrahim Arbab, Ph.D.</p>
+                        </div>
+                        <div class="flex items-end justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-error font-label-sm flex items-center gap-xs">
+                                    <span class="material-symbols-outlined text-[14px]">schedule</span> 7 Days Remaining
+                                </span>
+                                <span class="font-label-xs text-on-surface-variant mt-xs">ID: QM-882-X</span>
+                            </div>
+                            <button class="bg-crimson-red text-on-crimson-red font-title-md text-[14px] px-lg py-sm rounded-lg active:scale-95 duration-150 hover:brightness-110 shadow-lg shadow-crimson-red/20" onclick="app.handleReturn(event, this)">
+                                Return
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Borrowed Book Card 2 -->
+                <div class="bg-surface-container rounded-xl p-md border border-surface-variant flex gap-md items-center transition-all duration-300 hover:bg-surface-container-high group cursor-pointer" onclick="app.navigate('details')">
+                    <div class="w-20 h-28 flex-shrink-0 bg-surface-variant rounded-lg overflow-hidden relative shadow-md">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-dP6KA7pxK2AAFu7rFZQIzBB4pv_yDw7MgwvVkozEYsy3AjFfi7vMlUvV7vkT4exLQAqKbQO5FQXYmwapmUtIBJVPdkhWKGTSSgbBx6ErtplDDEi99k4zwgVZVtUxRyZQh_TNO6mVN1M7SFUrwtLidFcs2TunPioSRhp3z-n9ZS9QJbdXQ130f3rrVsuHpbmWeKSY2D9K9NW7FQO45AtAzPvJBF7DpGeHaq2T-XPUTlP2bLWD8csPrMoJG_UxhXLf9HZihQy4TdI" alt="Modern Architecture">
+                        <div class="absolute top-1 right-1 bg-secondary-container/90 px-xs py-[2px] rounded-sm">
+                            <span class="font-label-xs text-on-secondary-container uppercase">PDF</span>
+                        </div>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-between h-28">
+                        <div>
+                            <h3 class="font-title-md text-on-surface line-clamp-1">Modern Architecture</h3>
+                            <p class="text-on-surface-variant font-label-sm mt-xs">Sarah J. Miller</p>
+                        </div>
+                        <div class="flex items-end justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-error font-label-sm flex items-center gap-xs">
+                                    <span class="material-symbols-outlined text-[14px]">schedule</span> 12 Days Remaining
+                                </span>
+                                <span class="font-label-xs text-on-surface-variant mt-xs">ID: AR-102-M</span>
+                            </div>
+                            <button class="bg-crimson-red text-on-crimson-red font-title-md text-[14px] px-lg py-sm rounded-lg active:scale-95 duration-150 hover:brightness-110 shadow-lg shadow-crimson-red/20" onclick="app.handleReturn(event, this)">
+                                Return
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Atmospheric Background for Bookshelf -->
+            <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] bg-gradient-radial from-primary/5 to-transparent pointer-events-none -z-10 blur-3xl opacity-30"></div>
+        </section>
+
+        <!-- ================= VIEW: BOOK DETAILS ================= -->
+        <section id="view-details" class="view-section px-margin-mobile pt-lg pb-32 no-scrollbar max-w-2xl mx-auto">
+            <!-- Cover Section -->
+            <div class="flex justify-center">
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-secondary/10 blur-3xl rounded-full scale-75 group-hover:scale-100 transition-transform duration-700"></div>
+                    <img id="detail-cover" class="relative w-64 aspect-[3/4] object-cover rounded-lg shadow-2xl border border-surface-variant/50 emerald-glow transition-transform duration-500 hover:scale-[1.02]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD_oMx-mmj-FCpWbTBn2K4EQbczTqX0pnUU3oLmjEN00gSDtl5RxFs104OFPL6WjPsXwuNfjms7wn3hO1_7pxB_libRkFAWpmUQntcnT23KurwvEqijo9og3lXFbg2ApWLUIV2_7oFionpop6SG2JR8wpJ_IsHyLkpskrVHgYpihBBu3vi1dxcdyeo67gwg9Y0RCpPbRfA5VB5Zyd97uXSbkkcxY20K6-hZ8sYxaedWdrGg_waZ0ME4owxmwYu7xbGXCsONaR649o" alt="Advanced Organic Chemistry">
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="mt-xl text-center">
+                <h2 class="font-headline-lg-mobile text-on-surface mb-xs">Advanced Organic Chemistry</h2>
+                <p class="font-title-md text-on-surface-variant mb-md">David E. Lewis</p>
+                <div class="inline-flex items-center gap-xs bg-secondary-container px-lg py-sm rounded-full">
+                    <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                    <span class="font-label-sm text-on-secondary-container">Available (3 Copies Left)</span>
+                </div>
+            </div>
+
+            <!-- Bento Stats -->
+            <div class="mt-xl grid grid-cols-3 gap-sm">
+                <div class="glass-card rounded-xl p-md flex flex-col items-center justify-center text-center">
+                    <span class="material-symbols-outlined text-secondary mb-xs">menu_book</span>
+                    <span class="font-label-xs text-on-surface-variant">PAGES</span>
+                    <span class="font-title-md text-on-surface">1,176</span>
+                </div>
+                <div class="glass-card rounded-xl p-md flex flex-col items-center justify-center text-center">
+                    <span class="material-symbols-outlined text-secondary mb-xs">star</span>
+                    <span class="font-label-xs text-on-surface-variant">RATING</span>
+                    <span class="font-title-md text-on-surface">4.9</span>
+                </div>
+                <div class="glass-card rounded-xl p-md flex flex-col items-center justify-center text-center">
+                    <span class="material-symbols-outlined text-secondary mb-xs">language</span>
+                    <span class="font-label-xs text-on-surface-variant">ENG</span>
+                    <span class="font-label-xs text-on-surface-variant">LANG</span>
+                </div>
+            </div>
+
+            <!-- Abstract -->
+            <div class="mt-xl">
+                <h3 class="font-title-md text-on-surface mb-sm">Abstract</h3>
+                <div class="relative">
+                    <p id="book-description" class="font-body-md text-on-surface-variant leading-relaxed overflow-hidden transition-all duration-300 max-h-[100px]">
+                        According to the writer, “This book specifically targets advanced undergraduate students and entering graduate students, and is an attempt to bridge that gap—to provide upper-level undergraduate students with an advanced textbook that addresses a number of important topics in more depth than now occurs in most introductory textbooks, while providing both a useful review, and then a much more substantial discussion of these topics for beginning graduate students.
+                    </p>
+                    <button id="expand-btn" class="text-secondary font-label-sm mt-xs flex items-center gap-xs focus:outline-none" onclick="app.toggleDescription()">
+                        Read More <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="mt-lg flex flex-wrap gap-xs">
+                <span class="bg-tertiary/10 text-tertiary px-md py-1 rounded-full font-label-sm border border-tertiary/20">Chemistry</span>
+                <span class="bg-tertiary/10 text-tertiary px-md py-1 rounded-full font-label-sm border border-tertiary/20">Research</span>
+                <span class="bg-tertiary/10 text-tertiary px-md py-1 rounded-full font-label-sm border border-tertiary/20">PDF</span>
+            </div>
+
+            <!-- Details Floating CTA (Only visible on Details View) -->
+            <div id="details-cta" class="fixed bottom-0 left-0 w-full p-margin-mobile bg-gradient-to-t from-background via-background/90 to-transparent z-50">
+                <button class="w-full bg-secondary-container text-on-secondary-container font-title-md py-lg rounded-xl shadow-lg active:scale-95 transition-all duration-200 flex items-center justify-center gap-sm emerald-glow" onclick="app.borrowBook(this)">
+                    <span class="material-symbols-outlined">auto_stories</span>
+                    Borrow E-Book
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Bottom Navigation -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 w-full z-40 flex justify-around items-center px-4 py-2 bg-surface-container border-t border-surface-variant/30 pb-safe transition-transform duration-300">
+        <!-- Dashboard / Home -->
+        <div class="nav-item flex flex-col items-center justify-center text-on-surface-variant cursor-pointer p-2 rounded-xl transition-all active:scale-90" data-target="home" onclick="app.navigate('home')">
+            <span class="material-symbols-outlined nav-icon">dashboard</span>
+            <span class="font-label-sm mt-1">Dashboard</span>
+        </div>
+        <!-- Search -->
+        <div class="nav-item flex flex-col items-center justify-center text-on-surface-variant cursor-pointer p-2 rounded-xl transition-all active:scale-90" data-target="search" onclick="app.navigate('search')">
+            <span class="material-symbols-outlined nav-icon">search</span>
+            <span class="font-label-sm mt-1">Search</span>
+        </div>
+        <!-- Bookshelf -->
+        <div class="nav-item flex flex-col items-center justify-center text-on-surface-variant cursor-pointer p-2 rounded-xl transition-all active:scale-90" data-target="bookshelf" onclick="app.navigate('bookshelf')">
+            <span class="material-symbols-outlined nav-icon">auto_stories</span>
+            <span class="font-label-sm mt-1">Bookshelf</span>
+        </div>
+        <!-- Profile -->
+        <div class="nav-item flex flex-col items-center justify-center text-on-surface-variant cursor-pointer p-2 rounded-xl transition-all active:scale-90" data-target="profile">
+            <span class="material-symbols-outlined nav-icon">person</span>
+            <span class="font-label-sm mt-1">Profile</span>
+        </div>
+    </nav>
+
+    <!-- Global Toast Notification -->
+    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 bg-surface-bright text-on-surface px-lg py-md rounded-xl shadow-2xl border border-secondary/20 flex items-center gap-md opacity-0 pointer-events-none transition-all duration-300 translate-y-4 z-[100]">
+        <span class="material-symbols-outlined text-secondary icon-filled">check_circle</span>
+        <span id="toast-msg" class="font-body-md">Action successful.</span>
+    </div>
+
+    <!-- Unified Application Logic -->
+    <script>
+        const app = {
+            history: ['home'],
+            
+            init() {
+                this.bindScrollEffects();
+                this.navigate('home');
+                
+                // Details page Parallax
+                window.addEventListener('scroll', () => {
+                    if (this.currentView() === 'details') {
+                        const scroll = window.scrollY;
+                        const img = document.getElementById('detail-cover');
+                        if (img) img.style.transform = `translateY(${scroll * 0.05}px)`;
+                    }
+                });
+            },
+            
+            currentView() {
+                return this.history[this.history.length - 1];
+            },
+
+            navigate(viewName) {
+                if (this.currentView() !== viewName) {
+                    this.history.push(viewName);
+                }
+                this.renderView(viewName);
+            },
+
+            navigateBack() {
+                if (this.history.length > 1) {
+                    this.history.pop();
+                    this.renderView(this.currentView());
+                } else {
+                    this.navigate('home');
+                }
+            },
+
+            renderView(viewName) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Hide all sections
+                document.querySelectorAll('.view-section').forEach(sec => {
+                    sec.classList.remove('active');
+                });
+                
+                // Show target section
+                const targetView = document.getElementById(`view-${viewName}`);
+                if (targetView) targetView.classList.add('active');
+
+                // Header & Nav Management
+                const defaultHeader = document.getElementById('header-default');
+                const detailsHeader = document.getElementById('header-details');
+                const bottomNav = document.getElementById('bottom-nav');
+
+                if (viewName === 'details') {
+                    defaultHeader.classList.add('hidden');
+                    defaultHeader.classList.remove('flex');
+                    detailsHeader.classList.add('flex');
+                    detailsHeader.classList.remove('hidden');
+                    bottomNav.style.transform = 'translateY(100%)'; // slide nav down
+                } else {
+                    defaultHeader.classList.add('flex');
+                    defaultHeader.classList.remove('hidden');
+                    detailsHeader.classList.add('hidden');
+                    detailsHeader.classList.remove('flex');
+                    bottomNav.style.transform = 'translateY(0)'; // slide nav up
+                    
+                    this.updateNavState(viewName);
+                }
+
+                // If opening search, auto-focus
+                if(viewName === 'search') {
+                    setTimeout(() => {
+                        const searchInput = document.getElementById('active-search-input');
+                        if(searchInput) searchInput.focus();
+                    }, 100);
+                }
+            },
+
+            updateNavState(activeTarget) {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    const icon = item.querySelector('.nav-icon');
+                    if (item.dataset.target === activeTarget) {
+                        item.classList.add('bg-secondary-container', 'text-on-secondary-container', 'px-4');
+                        item.classList.remove('text-on-surface-variant', 'hover:bg-white/12');
+                        icon.classList.add('icon-filled');
+                    } else {
+                        item.classList.remove('bg-secondary-container', 'text-on-secondary-container', 'px-4');
+                        item.classList.add('text-on-surface-variant', 'hover:bg-white/12');
+                        icon.classList.remove('icon-filled');
+                    }
+                });
+            },
+
+            toggleDescription() {
+                const desc = document.getElementById('book-description');
+                const btn = document.getElementById('expand-btn');
+                const isExpanded = desc.style.maxHeight === 'none';
+                
+                if (isExpanded) {
+                    desc.style.maxHeight = '100px';
+                    btn.innerHTML = 'Read More <span class="material-symbols-outlined text-[16px]">expand_more</span>';
+                } else {
+                    desc.style.maxHeight = 'none';
+                    btn.innerHTML = 'Show Less <span class="material-symbols-outlined text-[16px]">expand_less</span>';
+                }
+            },
+
+            handleReturn(e, button) {
+                e.stopPropagation(); // prevent navigating to details
+                const card = button.closest('.bg-surface-container');
+                
+                // Add returning state
+                button.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">autorenew</span>';
+                button.classList.add('opacity-80', 'pointer-events-none');
+                
+                setTimeout(() => {
+                    card.style.transform = 'translateX(100%)';
+                    card.style.opacity = '0';
+                    
+                    this.showToast('Book returned successfully.');
+                    
+                    setTimeout(() => {
+                        card.remove();
+                    }, 300);
+                }, 800);
+            },
+            
+            borrowBook(button) {
+                button.innerHTML = '<span class="material-symbols-outlined animate-spin">autorenew</span> Processing...';
+                button.classList.add('pointer-events-none', 'opacity-80');
+                
+                setTimeout(() => {
+                    button.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Added to Bookshelf';
+                    button.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+                    button.classList.add('bg-secondary', 'text-on-secondary');
+                    this.showToast('E-Book successfully borrowed!');
+                    
+                    setTimeout(() => {
+                        this.navigate('bookshelf');
+                        // reset button for next time
+                        setTimeout(() => {
+                            button.innerHTML = '<span class="material-symbols-outlined">auto_stories</span> Borrow E-Book';
+                            button.classList.add('bg-secondary-container', 'text-on-secondary-container');
+                            button.classList.remove('bg-secondary', 'text-on-secondary', 'pointer-events-none', 'opacity-80');
+                        }, 500);
+                    }, 1500);
+                }, 1000);
+            },
+
+            showToast(message) {
+                const toast = document.getElementById('toast');
+                document.getElementById('toast-msg').innerText = message;
+                
+                toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                toast.classList.add('opacity-100', 'translate-y-0');
+                
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-4');
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                }, 3000);
+            },
+
+            bindScrollEffects() {
+                window.addEventListener('scroll', () => {
+                    const header = document.getElementById('main-header');
+                    if (window.scrollY > 10) {
+                        header.classList.add('shadow-xl', 'bg-surface-container-high');
+                        header.classList.remove('bg-surface-container');
+                    } else {
+                        header.classList.remove('shadow-xl', 'bg-surface-container-high');
+                        header.classList.add('bg-surface-container');
+                    }
+                });
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>
