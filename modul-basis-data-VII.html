@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul Basis Data VII — MySQL</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #131626;
+    --card: #181c2e;
+    --border: #252a42;
+    --accent-blue: #4f9eff;
+    --accent-cyan: #00e5c8;
+    --accent-purple: #a78bfa;
+    --accent-orange: #f97316;
+    --accent-pink: #ec4899;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --green: #22d3a5;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-ui: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    padding: 60px 40px 50px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    background: linear-gradient(180deg, #0b0d1a 0%, var(--bg) 100%);
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(79,158,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0,229,200,0.3);
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  header h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 30%, var(--accent-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ── NAV TABS ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,15,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--accent-blue); }
+  .tab-btn .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 50px 40px; }
+
+  .section { display: none; animation: fadeUp 0.4s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .section-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+
+  .section-header p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 680px;
+  }
+
+  /* ── INFO TABLE ── */
+  .info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 36px;
+    font-size: 14px;
+  }
+  .info-table th {
+    background: var(--surface);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .info-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(37,42,66,0.5);
+    vertical-align: top;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .info-table tr:last-child td { border-bottom: none; }
+  .info-table tr:hover td { background: rgba(79,158,255,0.03); }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .code-label span.tag {
+    padding: 2px 9px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .copy-btn.copied { border-color: var(--green); color: var(--green); }
+
+  pre {
+    padding: 22px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: #cdd6f4;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  /* ── SYNTAX HIGHLIGHT ── */
+  .k  { color: #cba6f7; font-weight: 600; }  /* keywords */
+  .kw { color: #89b4fa; }                      /* sub-keywords */
+  .fn { color: #89dceb; }                      /* function names */
+  .s  { color: #a6e3a1; }                      /* strings */
+  .n  { color: #fab387; }                      /* numbers */
+  .c  { color: #6c7086; font-style: italic; }  /* comments */
+  .t  { color: #f9e2af; }                      /* types/table names */
+  .op { color: #89dceb; }                      /* operators */
+  .p  { color: #cdd6f4; }                      /* plain */
+
+  /* ── SUB-SECTION ── */
+  .sub-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sub-title::before {
+    content: '';
+    display: block;
+    width: 3px; height: 18px;
+    border-radius: 2px;
+  }
+
+  /* ── GRID ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+  }
+
+  .card-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .card p {
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    display: flex; gap: 12px; align-items: flex-start;
+    border-left: 3px solid;
+  }
+  .callout.info   { background: rgba(79,158,255,0.08);  border-color: var(--accent-blue);   color: #93c5fd; }
+  .callout.tip    { background: rgba(0,229,200,0.07);   border-color: var(--accent-cyan);   color: #5eead4; }
+  .callout.warn   { background: rgba(251,191,36,0.08);  border-color: var(--yellow);         color: #fde68a; }
+  .callout.danger { background: rgba(248,113,113,0.08); border-color: var(--red);            color: #fca5a5; }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 36px;
+    font-size: 13.5px;
+  }
+  .compare-table th {
+    background: var(--surface);
+    padding: 14px 18px;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table td {
+    padding: 13px 18px;
+    border-bottom: 1px solid rgba(37,42,66,0.4);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .chip {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 100px;
+    font-weight: 600;
+  }
+
+  /* Color chips */
+  .chip-view    { background: rgba(79,158,255,0.15);  color: var(--accent-blue);   }
+  .chip-trigger { background: rgba(236,72,153,0.15);  color: var(--accent-pink);   }
+  .chip-proc    { background: rgba(167,139,250,0.15); color: var(--accent-purple); }
+  .chip-func    { background: rgba(0,229,200,0.15);   color: var(--accent-cyan);   }
+  .chip-orange  { background: rgba(249,115,22,0.15);  color: var(--accent-orange); }
+
+  /* Icon background colors per section */
+  .icon-view    { background: rgba(79,158,255,0.15);  }
+  .icon-trigger { background: rgba(236,72,153,0.15);  }
+  .icon-proc    { background: rgba(167,139,250,0.15); }
+  .icon-func    { background: rgba(0,229,200,0.15);   }
+  .icon-db      { background: rgba(251,191,36,0.15);  }
+
+  /* Section accent colors */
+  .color-view    { color: var(--accent-blue);   }
+  .color-trigger { color: var(--accent-pink);   }
+  .color-proc    { color: var(--accent-purple); }
+  .color-func    { color: var(--accent-cyan);   }
+
+  .sub-title.view-bar::before    { background: var(--accent-blue);   }
+  .sub-title.trigger-bar::before { background: var(--accent-pink);   }
+  .sub-title.proc-bar::before    { background: var(--accent-purple); }
+  .sub-title.func-bar::before    { background: var(--accent-cyan);   }
+
+  /* ── SCHEMA SETUP GRID ── */
+  .schema-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+  .schema-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .schema-card h4 {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent-cyan);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .schema-card ul {
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+  .schema-card ul li span {
+    color: var(--accent-orange);
+    font-size: 10px;
+    margin-left: 5px;
+  }
+
+  /* ── TRIGGER TYPE BADGES ── */
+  .trigger-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 700px) { .trigger-grid { grid-template-columns: 1fr 1fr; } }
+  .trigger-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .trigger-card .timing {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  .timing.before { background: rgba(251,191,36,0.15); color: var(--yellow); }
+  .timing.after  { background: rgba(0,229,200,0.15);  color: var(--accent-cyan); }
+  .trigger-card h4 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+  .trigger-card p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 60px;
+    padding: 30px 40px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">MySQL · Modul VII</div>
+  <h1>View, Trigger, Procedure &amp; Function</h1>
+  <p>Contoh kode lengkap untuk studi kasus sistem akademik — implementasi fitur lanjutan MySQL mulai dari pembuatan view hingga stored procedure dan function.</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="switchTab('setup')">
+    <span class="dot" style="background:#fbbf24"></span>Setup &amp; Schema
+  </button>
+  <button class="tab-btn" onclick="switchTab('view')">
+    <span class="dot" style="background:#4f9eff"></span>VIEW
+  </button>
+  <button class="tab-btn" onclick="switchTab('trigger')">
+    <span class="dot" style="background:#ec4899"></span>TRIGGER
+  </button>
+  <button class="tab-btn" onclick="switchTab('procedure')">
+    <span class="dot" style="background:#a78bfa"></span>STORED PROCEDURE
+  </button>
+  <button class="tab-btn" onclick="switchTab('function')">
+    <span class="dot" style="background:#00e5c8"></span>FUNCTION
+  </button>
+  <button class="tab-btn" onclick="switchTab('manage')">
+    <span class="dot" style="background:#f97316"></span>Manage Objects
+  </button>
+</nav>
+
+<main>
+
+<!-- ════════════════════════════════
+     SETUP & SCHEMA
+════════════════════════════════ -->
+<section id="setup" class="section active">
+  <div class="section-header">
+    <div class="section-icon icon-db">🗄️</div>
+    <div>
+      <h2>Setup Database &amp; Schema</h2>
+      <p>Buat database <code style="color:var(--accent-cyan);font-family:var(--font-mono)">db_akademik</code> beserta 4 tabel: mahasiswa, mata_kuliah, nilai, dan log_nilai, lalu isi dengan data awal.</p>
+    </div>
+  </div>
+
+  <!-- Schema Visual -->
+  <div class="sub-title" style="margin-bottom:16px"><span style="display:block;width:3px;height:18px;background:var(--yellow);border-radius:2px"></span>Struktur Tabel</div>
+  <div class="schema-grid">
+    <div class="schema-card">
+      <h4>📋 mahasiswa</h4>
+      <ul>
+        <li>id_mahasiswa <span>PK</span></li>
+        <li>nim</li><li>nama</li><li>jurusan</li><li>angkatan</li>
+      </ul>
+    </div>
+    <div class="schema-card">
+      <h4>📚 mata_kuliah</h4>
+      <ul>
+        <li>id_mk <span>PK</span></li>
+        <li>kode_mk</li><li>nama_mk</li><li>sks</li>
+      </ul>
+    </div>
+    <div class="schema-card">
+      <h4>📝 nilai</h4>
+      <ul>
+        <li>id_nilai <span>PK</span></li>
+        <li>id_mahasiswa <span>FK</span></li>
+        <li>id_mk <span>FK</span></li>
+        <li>nilai_angka</li>
+        <li>tanggal_input</li>
+      </ul>
+    </div>
+    <div class="schema-card">
+      <h4>🗒️ log_nilai</h4>
+      <ul>
+        <li>id_log <span>PK</span></li>
+        <li>id_nilai</li>
+        <li>aksi</li>
+        <li>nilai_lama</li>
+        <li>nilai_baru</li>
+        <li>waktu_log</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CREATE DATABASE -->
+  <div class="sub-title" style="margin-bottom:14px"><span style="display:block;width:3px;height:18px;background:var(--yellow);border-radius:2px"></span>1. Buat Database</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag" style="background:rgba(251,191,36,0.15);color:var(--yellow)">SQL</span>create_database.sql</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">CREATE DATABASE</span> <span class="t">db_akademik</span>;
+<span class="k">USE</span> <span class="t">db_akademik</span>;</pre>
+  </div>
+
+  <!-- CREATE TABLES -->
+  <div class="sub-title" style="margin-bottom:14px"><span style="display:block;width:3px;height:18px;background:var(--yellow);border-radius:2px"></span>2. Buat Tabel</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag" style="background:rgba(251,191,36,0.15);color:var(--yellow)">SQL</span>create_tables.sql</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- Tabel mahasiswa</span>
+<span class="k">CREATE TABLE</span> <span class="t">mahasiswa</span> (
+  id_mahasiswa  <span class="kw">INT AUTO_INCREMENT PRIMARY KEY</span>,
+  nim           <span class="kw">VARCHAR</span>(<span class="n">20</span>)  <span class="kw">NOT NULL</span>,
+  nama          <span class="kw">VARCHAR</span>(<span class="n">100</span>) <span class="kw">NOT NULL</span>,
+  jurusan       <span class="kw">VARCHAR</span>(<span class="n">100</span>) <span class="kw">NOT NULL</span>,
+  angkatan      <span class="kw">YEAR</span>         <span class="kw">NOT NULL</span>
+);
+
+<span class="c">-- Tabel mata_kuliah</span>
+<span class="k">CREATE TABLE</span> <span class="t">mata_kuliah</span> (
+  id_mk    <span class="kw">INT AUTO_INCREMENT PRIMARY KEY</span>,
+  kode_mk  <span class="kw">VARCHAR</span>(<span class="n">20</span>)  <span class="kw">NOT NULL</span>,
+  nama_mk  <span class="kw">VARCHAR</span>(<span class="n">100</span>) <span class="kw">NOT NULL</span>,
+  sks      <span class="kw">INT</span>          <span class="kw">NOT NULL</span>
+);
+
+<span class="c">-- Tabel nilai</span>
+<span class="k">CREATE TABLE</span> <span class="t">nilai</span> (
+  id_nilai      <span class="kw">INT AUTO_INCREMENT PRIMARY KEY</span>,
+  id_mahasiswa  <span class="kw">INT</span>             <span class="kw">NOT NULL</span>,
+  id_mk         <span class="kw">INT</span>             <span class="kw">NOT NULL</span>,
+  nilai_angka   <span class="kw">DECIMAL</span>(<span class="n">5</span>,<span class="n">2</span>)   <span class="kw">NOT NULL</span>,
+  tanggal_input <span class="kw">DATETIME</span>        <span class="kw">DEFAULT CURRENT_TIMESTAMP</span>,
+  <span class="k">FOREIGN KEY</span> (id_mahasiswa) <span class="kw">REFERENCES</span> <span class="t">mahasiswa</span>(id_mahasiswa),
+  <span class="k">FOREIGN KEY</span> (id_mk)        <span class="kw">REFERENCES</span> <span class="t">mata_kuliah</span>(id_mk)
+);
+
+<span class="c">-- Tabel log_nilai (untuk trigger)</span>
+<span class="k">CREATE TABLE</span> <span class="t">log_nilai</span> (
+  id_log     <span class="kw">INT AUTO_INCREMENT PRIMARY KEY</span>,
+  id_nilai   <span class="kw">INT</span>,
+  aksi       <span class="kw">VARCHAR</span>(<span class="n">20</span>),
+  nilai_lama <span class="kw">DECIMAL</span>(<span class="n">5</span>,<span class="n">2</span>),
+  nilai_baru <span class="kw">DECIMAL</span>(<span class="n">5</span>,<span class="n">2</span>),
+  waktu_log  <span class="kw">DATETIME</span> <span class="kw">DEFAULT CURRENT_TIMESTAMP</span>
+);</pre>
+  </div>
+
+  <!-- INSERT DATA -->
+  <div class="sub-title" style="margin-bottom:14px"><span style="display:block;width:3px;height:18px;background:var(--yellow);border-radius:2px"></span>3. Isi Data Awal</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag" style="background:rgba(251,191,36,0.15);color:var(--yellow)">SQL</span>insert_data.sql</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- Data mahasiswa</span>
+<span class="k">INSERT INTO</span> <span class="t">mahasiswa</span> (nim, nama, jurusan, angkatan) <span class="k">VALUES</span>
+(<span class="s">'23001'</span>, <span class="s">'Andi Saputra'</span>,  <span class="s">'Informatika'</span>,          <span class="n">2023</span>),
+(<span class="s">'23002'</span>, <span class="s">'Budi Santoso'</span>,  <span class="s">'Sistem Informasi'</span>,      <span class="n">2023</span>),
+(<span class="s">'23003'</span>, <span class="s">'Citra Dewi'</span>,    <span class="s">'Informatika'</span>,          <span class="n">2022</span>),
+(<span class="s">'23004'</span>, <span class="s">'Dian Pratama'</span>,  <span class="s">'Teknologi Informasi'</span>,  <span class="n">2021</span>);
+
+<span class="c">-- Data mata kuliah</span>
+<span class="k">INSERT INTO</span> <span class="t">mata_kuliah</span> (kode_mk, nama_mk, sks) <span class="k">VALUES</span>
+(<span class="s">'BD001'</span>,  <span class="s">'Basis Data'</span>,               <span class="n">3</span>),
+(<span class="s">'WEB001'</span>, <span class="s">'Pemrograman Web'</span>,          <span class="n">3</span>),
+(<span class="s">'RPL001'</span>, <span class="s">'Rekayasa Perangkat Lunak'</span>, <span class="n">3</span>);
+
+<span class="c">-- Data nilai</span>
+<span class="k">INSERT INTO</span> <span class="t">nilai</span> (id_mahasiswa, id_mk, nilai_angka) <span class="k">VALUES</span>
+(<span class="n">1</span>, <span class="n">1</span>, <span class="n">85.00</span>),  <span class="c">-- Andi  → Basis Data</span>
+(<span class="n">1</span>, <span class="n">2</span>, <span class="n">78.00</span>),  <span class="c">-- Andi  → Pemrograman Web</span>
+(<span class="n">2</span>, <span class="n">1</span>, <span class="n">72.00</span>),  <span class="c">-- Budi  → Basis Data</span>
+(<span class="n">3</span>, <span class="n">1</span>, <span class="n">90.00</span>),  <span class="c">-- Citra → Basis Data</span>
+(<span class="n">4</span>, <span class="n">3</span>, <span class="n">80.00</span>);  <span class="c">-- Dian  → RPL</span></pre>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     VIEW
+════════════════════════════════ -->
+<section id="view" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-view">🪟</div>
+    <div>
+      <h2 class="color-view">VIEW</h2>
+      <p>View adalah <strong>tabel virtual</strong> yang berasal dari query SELECT. Data tidak disimpan secara fisik — view hanya menyimpan definisinya. Ketika dipanggil, hasilnya selalu mengambil data terkini dari tabel aslinya.</p>
+    </div>
+  </div>
+
+  <table class="info-table">
+    <tr>
+      <th>Aspek</th><th>Penjelasan</th>
+    </tr>
+    <tr><td>Fungsi utama</td><td>Menyimpan query SELECT agar dapat dipanggil seperti tabel biasa.</td></tr>
+    <tr><td>Kelebihan</td><td>Query lebih ringkas, tampilan terstruktur, dapat menyembunyikan kolom sensitif.</td></tr>
+    <tr><td>Kapan digunakan</td><td>Saat query JOIN atau laporan sering dipakai berulang kali.</td></tr>
+    <tr><td>Catatan</td><td>Jika data tabel utama berubah, hasil view ikut berubah saat dipanggil.</td></tr>
+  </table>
+
+  <!-- 2.1 -->
+  <div class="sub-title view-bar">View Sederhana (WHERE)</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-view">VIEW</span>view_mahasiswa_informatika</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- Membuat view mahasiswa jurusan Informatika</span>
+<span class="k">CREATE VIEW</span> <span class="fn">view_mahasiswa_informatika</span> <span class="k">AS</span>
+<span class="k">SELECT</span> nim, nama, jurusan, angkatan
+<span class="k">FROM</span>   <span class="t">mahasiswa</span>
+<span class="k">WHERE</span>  jurusan <span class="op">=</span> <span class="s">'Informatika'</span>;
+
+<span class="c">-- Memanggil view seperti tabel biasa</span>
+<span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="fn">view_mahasiswa_informatika</span>;</pre>
+  </div>
+
+  <!-- 2.2 -->
+  <div class="sub-title view-bar">View dengan JOIN (Laporan Nilai)</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-view">VIEW</span>view_nilai_mahasiswa</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- View gabungan 3 tabel: nilai + mahasiswa + mata_kuliah</span>
+<span class="k">CREATE VIEW</span> <span class="fn">view_nilai_mahasiswa</span> <span class="k">AS</span>
+<span class="k">SELECT</span>
+  m.nim,
+  m.nama,
+  m.jurusan,
+  mk.kode_mk,
+  mk.nama_mk,
+  mk.sks,
+  n.nilai_angka,
+  n.tanggal_input
+<span class="k">FROM</span>   <span class="t">nilai</span> n
+<span class="k">JOIN</span>   <span class="t">mahasiswa</span>  m  <span class="k">ON</span> n.id_mahasiswa <span class="op">=</span> m.id_mahasiswa
+<span class="k">JOIN</span>   <span class="t">mata_kuliah</span> mk <span class="k">ON</span> n.id_mk        <span class="op">=</span> mk.id_mk;
+
+<span class="c">-- Tampilkan semua data dari view</span>
+<span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="fn">view_nilai_mahasiswa</span>;
+
+<span class="c">-- Filter dalam view (contoh: hanya BD001)</span>
+<span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="fn">view_nilai_mahasiswa</span>
+<span class="k">WHERE</span>  kode_mk <span class="op">=</span> <span class="s">'BD001'</span>
+<span class="k">ORDER BY</span> nilai_angka <span class="kw">DESC</span>;</pre>
+  </div>
+
+  <!-- Latihan soal 1 & 2 -->
+  <div class="sub-title view-bar">Latihan — View Mahasiswa 2023</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-view">VIEW</span>view_mahasiswa_2023</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- Latihan 1: mahasiswa angkatan 2023</span>
+<span class="k">CREATE VIEW</span> <span class="fn">view_mahasiswa_2023</span> <span class="k">AS</span>
+<span class="k">SELECT</span> nim, nama, jurusan, angkatan
+<span class="k">FROM</span>   <span class="t">mahasiswa</span>
+<span class="k">WHERE</span>  angkatan <span class="op">=</span> <span class="n">2023</span>;
+
+<span class="c">-- Latihan 2: laporan nilai (nim, nama, mk, sks, nilai)</span>
+<span class="k">CREATE VIEW</span> <span class="fn">view_laporan_nilai</span> <span class="k">AS</span>
+<span class="k">SELECT</span>
+  m.nim,
+  m.nama,
+  mk.nama_mk,
+  mk.sks,
+  n.nilai_angka
+<span class="k">FROM</span>   <span class="t">nilai</span> n
+<span class="k">JOIN</span>   <span class="t">mahasiswa</span>  m  <span class="k">ON</span> n.id_mahasiswa <span class="op">=</span> m.id_mahasiswa
+<span class="k">JOIN</span>   <span class="t">mata_kuliah</span> mk <span class="k">ON</span> n.id_mk        <span class="op">=</span> mk.id_mk;</pre>
+  </div>
+
+  <!-- 2.3 -->
+  <div class="sub-title view-bar">Mengubah dan Menghapus View</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-view">VIEW</span>alter &amp; drop</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- Mengubah definisi view (kolom jurusan dihapus)</span>
+<span class="k">CREATE OR REPLACE VIEW</span> <span class="fn">view_mahasiswa_informatika</span> <span class="k">AS</span>
+<span class="k">SELECT</span> nim, nama, jurusan
+<span class="k">FROM</span>   <span class="t">mahasiswa</span>
+<span class="k">WHERE</span>  jurusan <span class="op">=</span> <span class="s">'Informatika'</span>;
+
+<span class="c">-- Menghapus view</span>
+<span class="k">DROP VIEW</span> <span class="fn">view_mahasiswa_informatika</span>;
+<span class="k">DROP VIEW IF EXISTS</span> <span class="fn">view_mahasiswa_informatika</span>; <span class="c">-- aman (tidak error jika belum ada)</span></pre>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">💡</span>
+    <div>View cocok untuk query laporan yang sering dipakai. Namun view bukan pengganti tabel — datanya tetap berasal dari tabel dasar dan tidak menyimpan apapun secara fisik.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     TRIGGER
+════════════════════════════════ -->
+<section id="trigger" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-trigger">⚡</div>
+    <div>
+      <h2 class="color-trigger">TRIGGER</h2>
+      <p>Trigger adalah perintah SQL yang <strong>berjalan otomatis</strong> ketika terjadi aksi INSERT, UPDATE, atau DELETE pada tabel. Digunakan untuk membuat log, validasi data, atau otomatisasi proses.</p>
+    </div>
+  </div>
+
+  <!-- Tipe trigger visual -->
+  <div class="sub-title trigger-bar" style="margin-bottom:14px">Jenis Trigger</div>
+  <div class="trigger-grid">
+    <div class="trigger-card">
+      <div class="timing before">BEFORE</div>
+      <h4>BEFORE INSERT</h4>
+      <p>Validasi / ubah nilai sebelum disimpan.</p>
+    </div>
+    <div class="trigger-card">
+      <div class="timing after">AFTER</div>
+      <h4>AFTER INSERT</h4>
+      <p>Catat log setelah data ditambahkan.</p>
+    </div>
+    <div class="trigger-card">
+      <div class="timing before">BEFORE</div>
+      <h4>BEFORE UPDATE</h4>
+      <p>Batasi perubahan nilai tertentu.</p>
+    </div>
+    <div class="trigger-card">
+      <div class="timing after">AFTER</div>
+      <h4>AFTER UPDATE</h4>
+      <p>Catat nilai lama &amp; baru ke log.</p>
+    </div>
+    <div class="trigger-card">
+      <div class="timing before">BEFORE</div>
+      <h4>BEFORE DELETE</h4>
+      <p>Cegah penghapusan data tertentu.</p>
+    </div>
+    <div class="trigger-card">
+      <div class="timing after">AFTER</div>
+      <h4>AFTER DELETE</h4>
+      <p>Catat riwayat penghapusan data.</p>
+    </div>
+  </div>
+
+  <div class="callout info" style="margin-bottom:28px">
+    <span class="callout-icon">ℹ️</span>
+    <div><strong>OLD</strong> = nilai sebelum perubahan &nbsp;|&nbsp; <strong>NEW</strong> = nilai baru / yang akan disimpan. OLD tersedia di UPDATE &amp; DELETE. NEW tersedia di INSERT &amp; UPDATE.</div>
+  </div>
+
+  <!-- AFTER INSERT -->
+  <div class="sub-title trigger-bar">Trigger AFTER INSERT — Catat Log</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-trigger">TRIGGER</span>trg_after_insert_nilai</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE TRIGGER</span> <span class="fn">trg_after_insert_nilai</span>
+<span class="kw">AFTER INSERT ON</span> <span class="t">nilai</span>
+<span class="kw">FOR EACH ROW</span>
+<span class="k">BEGIN</span>
+  <span class="c">-- Catat aksi INSERT ke log_nilai; nilai_lama = NULL karena data baru</span>
+  <span class="k">INSERT INTO</span> <span class="t">log_nilai</span> (id_nilai, aksi, nilai_lama, nilai_baru)
+  <span class="k">VALUES</span> (<span class="kw">NEW</span>.id_nilai, <span class="s">'INSERT'</span>, <span class="kw">NULL</span>, <span class="kw">NEW</span>.nilai_angka);
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Uji coba: tambah nilai baru → cek log_nilai</span>
+<span class="k">INSERT INTO</span> <span class="t">nilai</span> (id_mahasiswa, id_mk, nilai_angka)
+<span class="k">VALUES</span> (<span class="n">2</span>, <span class="n">2</span>, <span class="n">88.00</span>);
+
+<span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="t">log_nilai</span>;</pre>
+  </div>
+
+  <!-- AFTER UPDATE -->
+  <div class="sub-title trigger-bar">Trigger AFTER UPDATE — Catat Perubahan</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-trigger">TRIGGER</span>trg_after_update_nilai</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE TRIGGER</span> <span class="fn">trg_after_update_nilai</span>
+<span class="kw">AFTER UPDATE ON</span> <span class="t">nilai</span>
+<span class="kw">FOR EACH ROW</span>
+<span class="k">BEGIN</span>
+  <span class="c">-- OLD = nilai sebelum diubah, NEW = nilai setelah diubah</span>
+  <span class="k">INSERT INTO</span> <span class="t">log_nilai</span> (id_nilai, aksi, nilai_lama, nilai_baru)
+  <span class="k">VALUES</span> (<span class="kw">OLD</span>.id_nilai, <span class="s">'UPDATE'</span>, <span class="kw">OLD</span>.nilai_angka, <span class="kw">NEW</span>.nilai_angka);
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Uji coba: ubah nilai_angka → cek log_nilai</span>
+<span class="k">UPDATE</span> <span class="t">nilai</span>
+<span class="k">SET</span>    nilai_angka <span class="op">=</span> <span class="n">92.00</span>
+<span class="k">WHERE</span>  id_nilai <span class="op">=</span> <span class="n">1</span>;
+
+<span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="t">log_nilai</span>;</pre>
+  </div>
+
+  <!-- BEFORE INSERT validasi -->
+  <div class="sub-title trigger-bar">Trigger BEFORE INSERT — Validasi Nilai</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-trigger">TRIGGER</span>trg_before_insert_nilai</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE TRIGGER</span> <span class="fn">trg_before_insert_nilai</span>
+<span class="kw">BEFORE INSERT ON</span> <span class="t">nilai</span>
+<span class="kw">FOR EACH ROW</span>
+<span class="k">BEGIN</span>
+  <span class="c">-- Tolak jika nilai di luar rentang 0–100</span>
+  <span class="k">IF</span> <span class="kw">NEW</span>.nilai_angka <span class="op">&lt;</span> <span class="n">0</span> <span class="k">OR</span> <span class="kw">NEW</span>.nilai_angka <span class="op">&gt;</span> <span class="n">100</span> <span class="k">THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+      <span class="k">SET MESSAGE_TEXT</span> <span class="op">=</span> <span class="s">'Nilai harus berada pada rentang 0 sampai 100'</span>;
+  <span class="k">END IF</span>;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Uji coba: nilai 120 → akan ditolak trigger</span>
+<span class="k">INSERT INTO</span> <span class="t">nilai</span> (id_mahasiswa, id_mk, nilai_angka)
+<span class="k">VALUES</span> (<span class="n">1</span>, <span class="n">3</span>, <span class="n">120.00</span>); <span class="c">-- Error: Nilai harus berada pada rentang 0 sampai 100</span></pre>
+  </div>
+
+  <!-- AFTER DELETE -->
+  <div class="sub-title trigger-bar">Trigger AFTER DELETE — Catat Data yang Dihapus</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-trigger">TRIGGER</span>trg_after_delete_nilai</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE TRIGGER</span> <span class="fn">trg_after_delete_nilai</span>
+<span class="kw">AFTER DELETE ON</span> <span class="t">nilai</span>
+<span class="kw">FOR EACH ROW</span>
+<span class="k">BEGIN</span>
+  <span class="c">-- OLD berisi data yang baru saja dihapus; NEW tidak tersedia di DELETE</span>
+  <span class="k">INSERT INTO</span> <span class="t">log_nilai</span> (id_nilai, aksi, nilai_lama, nilai_baru)
+  <span class="k">VALUES</span> (<span class="kw">OLD</span>.id_nilai, <span class="s">'DELETE'</span>, <span class="kw">OLD</span>.nilai_angka, <span class="kw">NULL</span>);
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Uji coba: hapus nilai → cek log_nilai</span>
+<span class="k">DELETE FROM</span> <span class="t">nilai</span> <span class="k">WHERE</span> id_nilai <span class="op">=</span> <span class="n">5</span>;
+<span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="t">log_nilai</span>;</pre>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div>Terlalu banyak trigger yang saling berkaitan dapat menyulitkan debugging. Pastikan setiap trigger memiliki tanggung jawab yang jelas dan terdokumentasi.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     STORED PROCEDURE
+════════════════════════════════ -->
+<section id="procedure" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-proc">⚙️</div>
+    <div>
+      <h2 class="color-proc">STORED PROCEDURE</h2>
+      <p>Stored procedure adalah <strong>kumpulan perintah SQL</strong> yang disimpan di dalam database. Dipanggil dengan <code style="color:var(--accent-purple);font-family:var(--font-mono)">CALL</code>. Cocok untuk proses yang berulang, transaksi, atau laporan.</p>
+    </div>
+  </div>
+
+  <table class="info-table">
+    <tr><th>Komponen</th><th>Penjelasan</th></tr>
+    <tr><td><code style="font-family:var(--font-mono);color:var(--accent-purple)">CREATE PROCEDURE</code></td><td>Membuat procedure baru.</td></tr>
+    <tr><td>Parameter <strong>IN</strong></td><td>Masukan dari user ke dalam procedure.</td></tr>
+    <tr><td>Parameter <strong>OUT</strong></td><td>Keluaran dari procedure ke user (variabel).</td></tr>
+    <tr><td>Parameter <strong>INOUT</strong></td><td>Bisa menerima masukan sekaligus mengembalikan keluaran.</td></tr>
+    <tr><td><code style="font-family:var(--font-mono);color:var(--accent-purple)">CALL</code></td><td>Menjalankan stored procedure.</td></tr>
+  </table>
+
+  <!-- Tanpa parameter -->
+  <div class="sub-title proc-bar">Procedure Tanpa Parameter</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-proc">PROC</span>tampil_semua_mahasiswa</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> <span class="fn">tampil_semua_mahasiswa</span>()
+<span class="k">BEGIN</span>
+  <span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="t">mahasiswa</span>;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Panggil procedure</span>
+<span class="k">CALL</span> <span class="fn">tampil_semua_mahasiswa</span>();</pre>
+  </div>
+
+  <!-- IN parameter -->
+  <div class="sub-title proc-bar">Procedure dengan Parameter IN</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-proc">PROC</span>cari_mahasiswa_by_jurusan</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> <span class="fn">cari_mahasiswa_by_jurusan</span>(<span class="kw">IN</span> p_jurusan <span class="kw">VARCHAR</span>(<span class="n">100</span>))
+<span class="k">BEGIN</span>
+  <span class="k">SELECT</span> nim, nama, jurusan, angkatan
+  <span class="k">FROM</span>   <span class="t">mahasiswa</span>
+  <span class="k">WHERE</span>  jurusan <span class="op">=</span> p_jurusan;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Panggil dengan argumen</span>
+<span class="k">CALL</span> <span class="fn">cari_mahasiswa_by_jurusan</span>(<span class="s">'Informatika'</span>);</pre>
+  </div>
+
+  <!-- Procedure tambah nilai -->
+  <div class="sub-title proc-bar">Procedure untuk Menambah Data Nilai</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-proc">PROC</span>tambah_nilai</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> <span class="fn">tambah_nilai</span>(
+  <span class="kw">IN</span> p_id_mahasiswa <span class="kw">INT</span>,
+  <span class="kw">IN</span> p_id_mk        <span class="kw">INT</span>,
+  <span class="kw">IN</span> p_nilai        <span class="kw">DECIMAL</span>(<span class="n">5</span>,<span class="n">2</span>)
+)
+<span class="k">BEGIN</span>
+  <span class="k">INSERT INTO</span> <span class="t">nilai</span> (id_mahasiswa, id_mk, nilai_angka)
+  <span class="k">VALUES</span> (p_id_mahasiswa, p_id_mk, p_nilai);
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Tambah nilai Citra untuk Pemrograman Web = 86</span>
+<span class="k">CALL</span> <span class="fn">tambah_nilai</span>(<span class="n">3</span>, <span class="n">2</span>, <span class="n">86.00</span>);
+<span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="t">nilai</span>;</pre>
+  </div>
+
+  <!-- OUT parameter -->
+  <div class="sub-title proc-bar">Procedure dengan Parameter OUT</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-proc">PROC</span>hitung_jumlah_mahasiswa</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> <span class="fn">hitung_jumlah_mahasiswa</span>(<span class="kw">OUT</span> total_mahasiswa <span class="kw">INT</span>)
+<span class="k">BEGIN</span>
+  <span class="c">-- Simpan hasil COUNT ke parameter OUT</span>
+  <span class="k">SELECT</span> <span class="fn">COUNT</span>(<span class="op">*</span>) <span class="k">INTO</span> total_mahasiswa
+  <span class="k">FROM</span>   <span class="t">mahasiswa</span>;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Panggil → simpan ke variabel @total</span>
+<span class="k">CALL</span> <span class="fn">hitung_jumlah_mahasiswa</span>(@total);
+<span class="k">SELECT</span> @total <span class="k">AS</span> jumlah_mahasiswa;</pre>
+  </div>
+
+  <!-- Latihan: tampil nilai by NIM -->
+  <div class="sub-title proc-bar">Latihan — Tampil Nilai Berdasarkan NIM</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-proc">PROC</span>tampil_nilai_by_nim</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> <span class="fn">tampil_nilai_by_nim</span>(<span class="kw">IN</span> p_nim <span class="kw">VARCHAR</span>(<span class="n">20</span>))
+<span class="k">BEGIN</span>
+  <span class="k">SELECT</span>
+    m.nim,
+    m.nama,
+    mk.nama_mk,
+    n.nilai_angka,
+    <span class="fn">konversi_grade</span>(n.nilai_angka) <span class="k">AS</span> grade  <span class="c">-- gunakan function</span>
+  <span class="k">FROM</span>  <span class="t">nilai</span> n
+  <span class="k">JOIN</span>  <span class="t">mahasiswa</span>   m  <span class="k">ON</span> n.id_mahasiswa <span class="op">=</span> m.id_mahasiswa
+  <span class="k">JOIN</span>  <span class="t">mata_kuliah</span> mk <span class="k">ON</span> n.id_mk        <span class="op">=</span> mk.id_mk
+  <span class="k">WHERE</span> m.nim <span class="op">=</span> p_nim;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Panggil untuk NIM 23001</span>
+<span class="k">CALL</span> <span class="fn">tampil_nilai_by_nim</span>(<span class="s">'23001'</span>);</pre>
+  </div>
+
+  <!-- tambah_mahasiswa -->
+  <div class="sub-title proc-bar">Latihan — Tambah Data Mahasiswa Baru</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-proc">PROC</span>tambah_mahasiswa</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> <span class="fn">tambah_mahasiswa</span>(
+  <span class="kw">IN</span> p_nim      <span class="kw">VARCHAR</span>(<span class="n">20</span>),
+  <span class="kw">IN</span> p_nama     <span class="kw">VARCHAR</span>(<span class="n">100</span>),
+  <span class="kw">IN</span> p_jurusan  <span class="kw">VARCHAR</span>(<span class="n">100</span>),
+  <span class="kw">IN</span> p_angkatan <span class="kw">YEAR</span>
+)
+<span class="k">BEGIN</span>
+  <span class="k">INSERT INTO</span> <span class="t">mahasiswa</span> (nim, nama, jurusan, angkatan)
+  <span class="k">VALUES</span> (p_nim, p_nama, p_jurusan, p_angkatan);
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Tambah mahasiswa baru</span>
+<span class="k">CALL</span> <span class="fn">tambah_mahasiswa</span>(<span class="s">'23005'</span>, <span class="s">'Eka Putra'</span>, <span class="s">'Informatika'</span>, <span class="n">2023</span>);
+<span class="k">SELECT</span> <span class="op">*</span> <span class="k">FROM</span> <span class="t">mahasiswa</span>;</pre>
+  </div>
+
+  <!-- hitung nilai by mk -->
+  <div class="sub-title proc-bar">Latihan — Hitung Jumlah Nilai per Mata Kuliah</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-proc">PROC</span>hitung_nilai_by_mk</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> <span class="fn">hitung_nilai_by_mk</span>(
+  <span class="kw">IN</span>  p_id_mk  <span class="kw">INT</span>,
+  <span class="kw">OUT</span> p_jumlah <span class="kw">INT</span>
+)
+<span class="k">BEGIN</span>
+  <span class="k">SELECT</span> <span class="fn">COUNT</span>(<span class="op">*</span>) <span class="k">INTO</span> p_jumlah
+  <span class="k">FROM</span>   <span class="t">nilai</span>
+  <span class="k">WHERE</span>  id_mk <span class="op">=</span> p_id_mk;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Hitung jumlah nilai untuk Basis Data (id_mk = 1)</span>
+<span class="k">CALL</span> <span class="fn">hitung_nilai_by_mk</span>(<span class="n">1</span>, @jumlah);
+<span class="k">SELECT</span> @jumlah <span class="k">AS</span> total_nilai;</pre>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     FUNCTION
+════════════════════════════════ -->
+<section id="function" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-func">🔧</div>
+    <div>
+      <h2 class="color-func">FUNCTION</h2>
+      <p>Function adalah objek database yang <strong>mengembalikan satu nilai</strong>. Dipanggil langsung dalam query SELECT, WHERE, atau ekspresi SQL lainnya. Cocok untuk konversi dan perhitungan.</p>
+    </div>
+  </div>
+
+  <table class="compare-table" style="margin-bottom:32px">
+    <tr>
+      <th>Perbedaan</th>
+      <th>Stored Procedure</th>
+      <th>Function</th>
+    </tr>
+    <tr>
+      <td>Cara memanggil</td>
+      <td><code style="font-family:var(--font-mono);color:var(--accent-purple)">CALL nama_proc()</code></td>
+      <td><code style="font-family:var(--font-mono);color:var(--accent-cyan)">SELECT nama_func()</code></td>
+    </tr>
+    <tr>
+      <td>Nilai balik</td>
+      <td>Opsional (bisa OUT)</td>
+      <td>Wajib satu nilai via <code style="font-family:var(--font-mono);color:var(--accent-cyan)">RETURN</code></td>
+    </tr>
+    <tr>
+      <td>Kegunaan</td>
+      <td>Proses bisnis, transaksi, query berulang</td>
+      <td>Perhitungan / konversi nilai</td>
+    </tr>
+    <tr>
+      <td>Contoh</td>
+      <td><code style="font-family:var(--font-mono);color:var(--accent-purple)">CALL tambah_nilai(...)</code></td>
+      <td><code style="font-family:var(--font-mono);color:var(--accent-cyan)">SELECT konversi_grade(85)</code></td>
+    </tr>
+  </table>
+
+  <!-- konversi_grade -->
+  <div class="sub-title func-bar">Function Nilai Angka → Grade Huruf</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-func">FUNC</span>konversi_grade</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE FUNCTION</span> <span class="fn">konversi_grade</span>(p_nilai <span class="kw">DECIMAL</span>(<span class="n">5</span>,<span class="n">2</span>))
+<span class="k">RETURNS</span> <span class="kw">VARCHAR</span>(<span class="n">2</span>)
+<span class="kw">DETERMINISTIC</span>
+<span class="k">BEGIN</span>
+  <span class="k">DECLARE</span> grade <span class="kw">VARCHAR</span>(<span class="n">2</span>);
+
+  <span class="k">IF</span>      p_nilai <span class="op">&gt;=</span> <span class="n">85</span> <span class="k">THEN</span> <span class="k">SET</span> grade <span class="op">=</span> <span class="s">'A'</span>;
+  <span class="k">ELSEIF</span>  p_nilai <span class="op">&gt;=</span> <span class="n">75</span> <span class="k">THEN</span> <span class="k">SET</span> grade <span class="op">=</span> <span class="s">'B'</span>;
+  <span class="k">ELSEIF</span>  p_nilai <span class="op">&gt;=</span> <span class="n">65</span> <span class="k">THEN</span> <span class="k">SET</span> grade <span class="op">=</span> <span class="s">'C'</span>;
+  <span class="k">ELSEIF</span>  p_nilai <span class="op">&gt;=</span> <span class="n">50</span> <span class="k">THEN</span> <span class="k">SET</span> grade <span class="op">=</span> <span class="s">'D'</span>;
+  <span class="k">ELSE</span>                        <span class="k">SET</span> grade <span class="op">=</span> <span class="s">'E'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="k">RETURN</span> grade;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Test langsung</span>
+<span class="k">SELECT</span> <span class="fn">konversi_grade</span>(<span class="n">88</span>) <span class="k">AS</span> grade;  <span class="c">-- → A</span>
+<span class="k">SELECT</span> <span class="fn">konversi_grade</span>(<span class="n">70</span>) <span class="k">AS</span> grade;  <span class="c">-- → B</span>
+<span class="k">SELECT</span> <span class="fn">konversi_grade</span>(<span class="n">45</span>) <span class="k">AS</span> grade;  <span class="c">-- → E</span></pre>
+  </div>
+
+  <!-- Function dalam SELECT -->
+  <div class="sub-title func-bar">Function dalam Query SELECT</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-func">FUNC</span>penggunaan di query</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- Tampilkan nilai mahasiswa lengkap beserta grade otomatis</span>
+<span class="k">SELECT</span>
+  m.nim,
+  m.nama,
+  mk.nama_mk,
+  n.nilai_angka,
+  <span class="fn">konversi_grade</span>(n.nilai_angka) <span class="k">AS</span> grade
+<span class="k">FROM</span>   <span class="t">nilai</span> n
+<span class="k">JOIN</span>   <span class="t">mahasiswa</span>   m  <span class="k">ON</span> n.id_mahasiswa <span class="op">=</span> m.id_mahasiswa
+<span class="k">JOIN</span>   <span class="t">mata_kuliah</span> mk <span class="k">ON</span> n.id_mk        <span class="op">=</span> mk.id_mk
+<span class="k">ORDER BY</span> n.nilai_angka <span class="kw">DESC</span>;</pre>
+  </div>
+
+  <!-- status_lulus -->
+  <div class="sub-title func-bar">Function Status Kelulusan</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-func">FUNC</span>status_lulus</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE FUNCTION</span> <span class="fn">status_lulus</span>(p_nilai <span class="kw">DECIMAL</span>(<span class="n">5</span>,<span class="n">2</span>))
+<span class="k">RETURNS</span> <span class="kw">VARCHAR</span>(<span class="n">20</span>)
+<span class="kw">DETERMINISTIC</span>
+<span class="k">BEGIN</span>
+  <span class="k">IF</span> p_nilai <span class="op">&gt;=</span> <span class="n">65</span> <span class="k">THEN</span>
+    <span class="k">RETURN</span> <span class="s">'Lulus'</span>;
+  <span class="k">ELSE</span>
+    <span class="k">RETURN</span> <span class="s">'Tidak Lulus'</span>;
+  <span class="k">END IF</span>;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Gunakan function dari view (view harus sudah dibuat)</span>
+<span class="k">SELECT</span>
+  nama,
+  nama_mk,
+  nilai_angka,
+  <span class="fn">status_lulus</span>(nilai_angka) <span class="k">AS</span> status
+<span class="k">FROM</span> <span class="fn">view_nilai_mahasiswa</span>;</pre>
+  </div>
+
+  <!-- konversi_predikat -->
+  <div class="sub-title func-bar">Latihan — Function Konversi Predikat</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-func">FUNC</span>konversi_predikat</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE FUNCTION</span> <span class="fn">konversi_predikat</span>(p_nilai <span class="kw">DECIMAL</span>(<span class="n">5</span>,<span class="n">2</span>))
+<span class="k">RETURNS</span> <span class="kw">VARCHAR</span>(<span class="n">30</span>)
+<span class="kw">DETERMINISTIC</span>
+<span class="k">BEGIN</span>
+  <span class="k">IF</span>      p_nilai <span class="op">&gt;=</span> <span class="n">85</span> <span class="k">THEN</span> <span class="k">RETURN</span> <span class="s">'Sangat Baik'</span>;
+  <span class="k">ELSEIF</span>  p_nilai <span class="op">&gt;=</span> <span class="n">75</span> <span class="k">THEN</span> <span class="k">RETURN</span> <span class="s">'Baik'</span>;
+  <span class="k">ELSEIF</span>  p_nilai <span class="op">&gt;=</span> <span class="n">65</span> <span class="k">THEN</span> <span class="k">RETURN</span> <span class="s">'Cukup'</span>;
+  <span class="k">ELSE</span>                        <span class="k">RETURN</span> <span class="s">'Kurang'</span>;
+  <span class="k">END IF</span>;
+<span class="k">END</span> $$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Latihan 9: gabungkan function dalam SELECT dari view</span>
+<span class="k">SELECT</span>
+  nim,
+  nama,
+  nama_mk,
+  nilai_angka,
+  <span class="fn">konversi_grade</span>(nilai_angka)    <span class="k">AS</span> grade,
+  <span class="fn">konversi_predikat</span>(nilai_angka) <span class="k">AS</span> predikat,
+  <span class="fn">status_lulus</span>(nilai_angka)      <span class="k">AS</span> status
+<span class="k">FROM</span> <span class="fn">view_nilai_mahasiswa</span>
+<span class="k">ORDER BY</span> nilai_angka <span class="kw">DESC</span>;</pre>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">💡</span>
+    <div>Kata kunci <strong>DETERMINISTIC</strong> menandakan function selalu menghasilkan nilai yang sama untuk input yang sama. Ini penting untuk optimisasi query oleh MySQL.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     MANAGE OBJECTS
+════════════════════════════════ -->
+<section id="manage" class="section">
+  <div class="section-header">
+    <div class="section-icon icon-db">🛠️</div>
+    <div>
+      <h2>Melihat &amp; Menghapus Object</h2>
+      <p>Perintah-perintah SQL untuk melihat daftar view, procedure, function, dan trigger yang ada di database, serta menghapus object yang tidak diperlukan.</p>
+    </div>
+  </div>
+
+  <!-- Melihat -->
+  <div class="sub-title" style="margin-bottom:14px"><span style="display:block;width:3px;height:18px;background:var(--accent-orange);border-radius:2px"></span>Melihat Daftar Object</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-orange">SQL</span>show_objects.sql</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- Melihat daftar VIEW</span>
+<span class="k">SHOW FULL TABLES</span>
+<span class="k">WHERE</span> Table_type <span class="op">=</span> <span class="s">'VIEW'</span>;
+
+<span class="c">-- Melihat daftar STORED PROCEDURE</span>
+<span class="k">SHOW PROCEDURE STATUS</span>
+<span class="k">WHERE</span> Db <span class="op">=</span> <span class="s">'db_akademik'</span>;
+
+<span class="c">-- Melihat daftar FUNCTION</span>
+<span class="k">SHOW FUNCTION STATUS</span>
+<span class="k">WHERE</span> Db <span class="op">=</span> <span class="s">'db_akademik'</span>;
+
+<span class="c">-- Melihat daftar TRIGGER</span>
+<span class="k">SHOW TRIGGERS</span>;
+
+<span class="c">-- Lihat definisi object tertentu</span>
+<span class="k">SHOW CREATE VIEW</span>     <span class="fn">view_nilai_mahasiswa</span>;
+<span class="k">SHOW CREATE PROCEDURE</span> <span class="fn">tampil_semua_mahasiswa</span>;
+<span class="k">SHOW CREATE FUNCTION</span> <span class="fn">konversi_grade</span>;
+<span class="k">SHOW CREATE TRIGGER</span>  <span class="fn">trg_after_insert_nilai</span>;</pre>
+  </div>
+
+  <!-- Menghapus -->
+  <div class="sub-title" style="margin-bottom:14px"><span style="display:block;width:3px;height:18px;background:var(--accent-orange);border-radius:2px"></span>Menghapus Object</div>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-label"><span class="tag chip-orange">SQL</span>drop_objects.sql</div>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="c">-- DROP VIEW</span>
+<span class="k">DROP VIEW</span>      <span class="fn">view_nilai_mahasiswa</span>;
+<span class="k">DROP VIEW IF EXISTS</span> <span class="fn">view_mahasiswa_2023</span>;
+
+<span class="c">-- DROP TRIGGER</span>
+<span class="k">DROP TRIGGER</span>   <span class="fn">trg_after_insert_nilai</span>;
+<span class="k">DROP TRIGGER IF EXISTS</span> <span class="fn">trg_after_update_nilai</span>;
+
+<span class="c">-- DROP PROCEDURE</span>
+<span class="k">DROP PROCEDURE</span> <span class="fn">tampil_semua_mahasiswa</span>;
+<span class="k">DROP PROCEDURE IF EXISTS</span> <span class="fn">tambah_nilai</span>;
+
+<span class="c">-- DROP FUNCTION</span>
+<span class="k">DROP FUNCTION</span>  <span class="fn">konversi_grade</span>;
+<span class="k">DROP FUNCTION IF EXISTS</span> <span class="fn">status_lulus</span>;</pre>
+  </div>
+
+  <!-- Ringkasan perbandingan -->
+  <div class="sub-title" style="margin-bottom:14px"><span style="display:block;width:3px;height:18px;background:var(--accent-orange);border-radius:2px"></span>Ringkasan Perbandingan</div>
+  <table class="compare-table">
+    <tr>
+      <th>Object</th>
+      <th>Definisi</th>
+      <th>Cara Memanggil</th>
+      <th>Contoh Kegunaan</th>
+    </tr>
+    <tr>
+      <td><span class="chip chip-view">VIEW</span></td>
+      <td>Tabel virtual dari query SELECT</td>
+      <td><code style="font-family:var(--font-mono);font-size:12px">SELECT * FROM nama_view</code></td>
+      <td>Laporan nilai mahasiswa</td>
+    </tr>
+    <tr>
+      <td><span class="chip chip-trigger">TRIGGER</span></td>
+      <td>SQL otomatis saat INSERT / UPDATE / DELETE</td>
+      <td>Berjalan otomatis</td>
+      <td>Log perubahan nilai</td>
+    </tr>
+    <tr>
+      <td><span class="chip chip-proc">PROCEDURE</span></td>
+      <td>Kumpulan SQL yang disimpan &amp; dipanggil</td>
+      <td><code style="font-family:var(--font-mono);font-size:12px">CALL nama_proc()</code></td>
+      <td>Tambah nilai, laporan, transaksi</td>
+    </tr>
+    <tr>
+      <td><span class="chip chip-func">FUNCTION</span></td>
+      <td>SQL yang menghasilkan satu nilai</td>
+      <td><code style="font-family:var(--font-mono);font-size:12px">SELECT nama_func(val)</code></td>
+      <td>Konversi nilai ke grade</td>
+    </tr>
+  </table>
+
+  <div class="callout info">
+    <span class="callout-icon">📌</span>
+    <div>
+      <strong>Kapan Menggunakan Apa?</strong><br>
+      Gunakan <strong>View</strong> untuk menyederhanakan query laporan yang sering dipakai. Gunakan <strong>Trigger</strong> untuk otomatisasi seperti pencatatan log atau validasi. Gunakan <strong>Stored Procedure</strong> untuk menyimpan logika bisnis yang berulang, seperti proses insert transaksi. Gunakan <strong>Function</strong> untuk konversi atau kalkulasi nilai yang dibutuhkan langsung dalam query SELECT.
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Modul Basis Data VII · MySQL · View · Trigger · Stored Procedure · Function
+</footer>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  const idx = ['setup','view','trigger','procedure','function','manage'].indexOf(id);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+}
+
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+</script>
+</body>
+</html>
